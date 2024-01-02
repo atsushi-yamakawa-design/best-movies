@@ -1,0 +1,19 @@
+main {
+  min-height: 100vh;
+  padding: 2em 1em;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button {
+  border: none;
+  background-color: aqua;
+  color: #000;
+}
+button:disabled {
+  background-color: rgb(187, 187, 187);
+  color: #4b4b4b;
+  cursor: not-allowed;
+}

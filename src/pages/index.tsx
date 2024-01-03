@@ -151,7 +151,7 @@ export default function MoviePage() {
               </button>
               <div className={style.selectedListModalHeader}>
                 <p className={style.selectedCount}>
-                  {selectedMovies.length}件選択中
+                  {selectedMovies.length}件/10件選択中
                 </p>
                 <button
                   className={style.removeAllButton}
@@ -179,7 +179,7 @@ export default function MoviePage() {
               </ul>
               <div className={style.buttonWrapper}>
                 <button onClick={handleCloseSelectedList}>選択に戻る</button>
-                <button onClick={handleCloseSelectedList}>共有する</button>
+                <button onClick={handleCloseSelectedList}>共有する→</button>
               </div>
             </div>
           </div>

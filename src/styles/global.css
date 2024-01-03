@@ -11,6 +11,7 @@ button {
   border: none;
   background-color: aqua;
   color: #000;
+  border-radius: 3em;
 }
 button:disabled {
   background-color: rgb(187, 187, 187);

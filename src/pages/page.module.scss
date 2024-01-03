@@ -246,34 +246,49 @@
       font-size: 0.8em;
     }
   }
-  .movieCountButton {
-    position: fixed;
-    top: 3em;
-    right: 1em;
-    z-index: 9999;
-  }
+
   .searchModule {
     width: 100%;
     margin-top: 2em;
-    .textInput {
-      width: 100%;
+    .textInputWrapper {
       position: sticky;
-      top: 0;
+      top: 1em;
+
+      .textInput {
+        width: 100%;
+        height: 2.4em;
+        padding: 0 0.5em;
+      }
+      .movieCountButton {
+        position: absolute;
+        width: 8em;
+        height: 2.4em;
+        right: 0;
+        bottom: -3em;
+        z-index: 999;
+      }
     }
     .movieList {
-      margin-top: 1em;
+      margin-top: 4em;
       display: flex;
       flex-direction: column;
       gap: 0.2em;
       li {
         display: flex;
         justify-content: space-between;
-        .movieTitle {
+        .movieText {
           width: 80%;
+          .selectedText {
+            font-size: 0.8em;
+            color: #666;
+          }
         }
         img {
           width: 18%;
         }
+      }
+      .selected {
+        background-color: #eef2f2;
       }
     }
   }
@@ -294,6 +309,77 @@
         max-width: calc(20% - 1px);
         height: auto;
         margin-bottom: 1px;
+      }
+    }
+  }
+  .selectedListModalWrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100dvw;
+    height: 100dvh;
+    z-index: 9999;
+    display: flex;
+    background-color: rgba(0, 0, 0, 0.5);
+    align-items: flex-end;
+    .selectedListModal {
+      width: 100%;
+      background-color: #fff;
+      padding: 1em 1em;
+      border-radius: 1em 1em 0 0;
+      max-height: 100dvh;
+      position: relative;
+      .modalCloseButton {
+        position: absolute;
+        top: -2em;
+        right: 1em;
+      }
+      .selectedListModalHeader {
+        display: flex;
+        gap: 1em;
+        justify-content: space-between;
+        .selectedCount {
+          font-size: 0.7em;
+        }
+        .removeAllButton {
+          font-size: 0.7em;
+          background-color: rgb(226, 226, 226);
+        }
+      }
+      .selectedList {
+        margin-top: 0.5em;
+        overflow-y: scroll;
+        li {
+          padding: 0.4em 0;
+          display: flex;
+          gap: 1em;
+          justify-content: space-between;
+          align-items: center;
+          &:hover {
+            background-color: aquamarine;
+          }
+          .sortButtons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2em;
+            button {
+              background: none;
+            }
+          }
+          .selectedTitle {
+            flex: 1;
+          }
+        }
+      }
+      .buttonWrapper {
+        margin-top: 1em;
+        padding: 0.5em 0;
+        display: flex;
+        justify-content: center;
+        gap: 1em;
+        button {
+          padding: 0.4em 1em;
+        }
       }
     }
   }

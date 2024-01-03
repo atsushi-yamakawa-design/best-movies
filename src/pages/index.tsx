@@ -163,14 +163,16 @@ export default function MoviePage() {
                 {selectedMovies.map((movie, index) => (
                   <li key={movie.id}>
                     <div className={style.sortButtons}>
-                      <button onClick={() => moveMovie(movie.id, -1)}>↑</button>
-                      <button onClick={() => moveMovie(movie.id, 1)}>↓</button>
+                      <button onClick={() => moveMovie(movie.id, -1)}>
+                        ⬆️
+                      </button>
+                      <button onClick={() => moveMovie(movie.id, 1)}>⬇️</button>
                     </div>
                     <p className={style.selectedTitle}>{movie.title}</p>
                     <button
                       className={style.removeButton}
                       onClick={() => handleRemoveMovie(movie.id)}>
-                      x
+                      ×
                     </button>
                   </li>
                 ))}

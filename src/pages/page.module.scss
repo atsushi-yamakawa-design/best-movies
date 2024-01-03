@@ -370,6 +370,20 @@
             flex: 1;
             margin-left: 1em;
           }
+          &:first-child {
+            .selectedTitle::before {
+              content: "🥇";
+              margin-right: 0.2em;
+            }
+          }
+          &:nth-child(2) .selectedTitle::before {
+            content: "🥈";
+            margin-right: 0.2em;
+          }
+          &:nth-child(3) .selectedTitle::before {
+            content: "🥉";
+            margin-right: 0.2em;
+          }
           .removeButton {
             font-size: 1.4em;
           }

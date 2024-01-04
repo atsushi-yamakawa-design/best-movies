@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import style from "./page.module.scss";
+import Image from "next/image";
 
 interface Movie {
   id: number;
@@ -124,33 +125,34 @@ export default function MoviePage() {
             )}
           </div>
           {movies.length > 0 ? (
-            movies.map((movie) => (
-              <ul className={style.movieList}>
-                {movies.map((movie) => (
-                  <li
-                    key={movie.id}
-                    onClick={() => handleMovieSelect(movie)}
-                    className={
-                      selectedMovies.find((m) => m.id === movie.id)
-                        ? style.selected
-                        : ""
-                    }>
-                    <div className={style.movieText}>
-                      <p className={style.movieTitle}>{movie.title}</p>
-                      {selectedMovies.find((m) => m.id === movie.id) && (
-                        <p className={style.selectedText}>選択中</p>
-                      )}
-                    </div>
-                    {movie.poster_path && (
-                      <img
-                        src={`https://image.tmdb.org/t/p/w200/${movie.poster_path}`}
-                        alt={movie.title}
-                      />
+            <ul className={style.movieList}>
+              {movies.map((movie) => (
+                <li
+                  key={movie.id}
+                  onClick={() => handleMovieSelect(movie)}
+                  className={
+                    selectedMovies.find((m) => m.id === movie.id)
+                      ? style.selected
+                      : ""
+                  }>
+                  <div className={style.movieText}>
+                    <p className={style.movieTitle}>{movie.title}</p>
+                    {selectedMovies.find((m) => m.id === movie.id) && (
+                      <p className={style.selectedText}>選択中</p>
                     )}
-                  </li>
-                ))}
-              </ul>
-            ))
+                  </div>
+                  {movie.poster_path && (
+                    <Image
+                      src={`https://image.tmdb.org/t/p/w200/${movie.poster_path}`}
+                      alt={movie.title}
+                      width={165}
+                      height={247}
+                      unoptimized
+                    />
+                  )}
+                </li>
+              ))}
+            </ul>
           ) : (
             <p className={style.emptyText}>検索結果は0件です</p>
           )}
@@ -200,7 +202,8 @@ export default function MoviePage() {
         )}
         <div className={style.credit}>
           movie database by
-          <img src="/icon/tmdb_logo.svg" alt="TMDB" />
+          {/* <img src="/icon/tmdb_logo.svg" alt="TMDB" /> */}
+          <Image src="/icon/tmdb_logo.svg" alt="TMDB" width={80} height={10} />
         </div>
       </main>
     </>

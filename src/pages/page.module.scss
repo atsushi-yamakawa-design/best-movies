@@ -253,12 +253,24 @@
     .textInputWrapper {
       position: sticky;
       top: 1em;
-
-      .textInput {
-        width: 100%;
-        height: 2.4em;
-        padding: 0 0.5em;
+      .searchContainer {
+        position: relative;
+        .textInput {
+          width: 100%;
+          height: 2.4em;
+          padding: 0 0.5em;
+        }
+        button {
+          position: absolute;
+          right: 0;
+          top: 0;
+          height: 100%;
+          width: 2em;
+          background: none;
+          font-size: 1.5em;
+        }
       }
+
       .movieCountButton {
         position: absolute;
         width: 8em;
@@ -290,6 +302,10 @@
       .selected {
         background-color: #eef2f2;
       }
+    }
+    .emptyText {
+      margin-top: 1em;
+      font-size: 0.8em;
     }
   }
   .resultMovies {

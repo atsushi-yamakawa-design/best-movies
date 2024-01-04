@@ -29,6 +29,11 @@ export default function MoviePage() {
     }
   }, [search]);
 
+  // 検索窓をクリアする
+  const clearSearch = () => {
+    setSearch("");
+  };
+
   const handleMovieSelect = (movie: Movie) => {
     if (selectedMovies.find((m) => m.id === movie.id)) {
       setSelectedMovies(selectedMovies.filter((m) => m.id !== movie.id));
@@ -64,7 +69,7 @@ export default function MoviePage() {
 
   // 全ての選択を解除する処理
   const handleRemoveAllMovies = () => {
-    if (window.confirm("リストをリセットしますか？")) {
+    if (window.confirm("全て選択解除してリセットしますか？")) {
       setSelectedMovies([]);
       handleCloseSelectedList();
     }
@@ -100,13 +105,16 @@ export default function MoviePage() {
         <h1>⭐️わたしの2023映画ベスト10⭐️</h1>
         <div className={style.searchModule}>
           <div className={style.textInputWrapper}>
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="タイトルを入力"
-              className={style.textInput}
-            />
+            <div className={style.searchContainer}>
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="タイトルを入力"
+                className={style.textInput}
+              />
+              {search && <button onClick={clearSearch}>×</button>}
+            </div>
             {selectedMovies.length > 0 && (
               <button
                 onClick={handleShowSelectedList}
@@ -115,31 +123,37 @@ export default function MoviePage() {
               </button>
             )}
           </div>
-          <ul className={style.movieList}>
-            {movies.map((movie) => (
-              <li
-                key={movie.id}
-                onClick={() => handleMovieSelect(movie)}
-                className={
-                  selectedMovies.find((m) => m.id === movie.id)
-                    ? style.selected
-                    : ""
-                }>
-                <div className={style.movieText}>
-                  <p className={style.movieTitle}>{movie.title}</p>
-                  {selectedMovies.find((m) => m.id === movie.id) && (
-                    <p className={style.selectedText}>選択中</p>
-                  )}
-                </div>
-                {movie.poster_path && (
-                  <img
-                    src={`https://image.tmdb.org/t/p/w200/${movie.poster_path}`}
-                    alt={movie.title}
-                  />
-                )}
-              </li>
-            ))}
-          </ul>
+          {movies.length > 0 ? (
+            movies.map((movie) => (
+              <ul className={style.movieList}>
+                {movies.map((movie) => (
+                  <li
+                    key={movie.id}
+                    onClick={() => handleMovieSelect(movie)}
+                    className={
+                      selectedMovies.find((m) => m.id === movie.id)
+                        ? style.selected
+                        : ""
+                    }>
+                    <div className={style.movieText}>
+                      <p className={style.movieTitle}>{movie.title}</p>
+                      {selectedMovies.find((m) => m.id === movie.id) && (
+                        <p className={style.selectedText}>選択中</p>
+                      )}
+                    </div>
+                    {movie.poster_path && (
+                      <img
+                        src={`https://image.tmdb.org/t/p/w200/${movie.poster_path}`}
+                        alt={movie.title}
+                      />
+                    )}
+                  </li>
+                ))}
+              </ul>
+            ))
+          ) : (
+            <p className={style.emptyText}>検索結果は0件です</p>
+          )}
         </div>
         {showSelectedList && (
           <div className={style.selectedListModalWrapper}>
@@ -156,7 +170,7 @@ export default function MoviePage() {
                 <button
                   className={style.removeAllButton}
                   onClick={handleRemoveAllMovies}>
-                  リストをリセット
+                  リセット
                 </button>
               </div>
               <ul className={style.selectedList}>

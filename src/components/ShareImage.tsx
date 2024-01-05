@@ -133,6 +133,9 @@ const ShareImage = ({
               title: "My Best Movies 2023 ",
               text: shareText
             })
+            .then(() => {
+              alert("共有が開始されました"); // 共有が開始されたことを示すアラート
+            })
             .catch((error) => {
               console.error("Error sharing the image", error);
               alert("何かしらのエラー");
@@ -147,6 +150,7 @@ const ShareImage = ({
       console.log(
         "Web Share API is not supported in your browser, or canvas is null."
       );
+      alert("Web Share APIはこのブラウザではサポートされていません");
     }
   };
 
@@ -154,7 +158,7 @@ const ShareImage = ({
     <div className={style.canvasContainer}>
       <canvas ref={canvasRef} width="1179" height="2229" />
       <button onClick={shareCanvas} className={style.shareButton}>
-        Share Image
+        共有する
       </button>
     </div>
   );

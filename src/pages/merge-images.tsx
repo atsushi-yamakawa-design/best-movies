@@ -171,14 +171,35 @@ const ImagePage = () => {
     }
   }, []);
 
+  const shareImage = async () => {
+    if (navigator.share && canvasRef.current) {
+      const canvas = canvasRef.current;
+      canvas.toBlob((blob) => {
+        if (blob) {
+          const file = new File([blob], "image.png", { type: "image/png" });
+          navigator
+            .share({
+              files: [file],
+              title: "Canvas Image",
+              text: "Check out this image I created!"
+            })
+            .catch((error) => {
+              console.error("Error sharing the image", error);
+            });
+        }
+      }, "image/png");
+    } else {
+      console.log(
+        "Web Share API is not supported in your browser, or canvas is null."
+      );
+    }
+  };
+
+  // シェアボタンの追加
   return (
     <div>
       <canvas ref={canvasRef} width="600" height="600" />
-      {downloadUrl && (
-        <a href={downloadUrl} download="image.png">
-          Download Image
-        </a>
-      )}
+      <button onClick={shareImage}>Share Image</button>
     </div>
   );
 };

@@ -91,12 +91,12 @@ const ShareImage = ({
   }, [backgroundUrl, movieImageUrls, movieTitles]);
 
   // シェア用のテキスト生成
-  const createShareText = (movieTitles: string[]) => {
+  const createShareText = (titles: string[]) => {
     let shareText = "My Best Movies 2023\n\n";
 
     // トップ3の映画タイトルのみを追加
-    for (let i = 0; i < movieTitles.length && i < 3; i++) {
-      const title = movieTitles[i];
+    for (let i = 0; i < titles.length && i < 3; i++) {
+      const title = titles[i];
       let medal = "";
       switch (i) {
         case 0:
@@ -120,7 +120,7 @@ const ShareImage = ({
     return shareText + shareTextCredit;
   };
 
-  const shareImage = async () => {
+  const shareCanvas = async () => {
     if (navigator.share && canvasRef.current) {
       const canvas = canvasRef.current;
       const shareText = createShareText(movieTitles);
@@ -148,7 +148,7 @@ const ShareImage = ({
   return (
     <div className={style.canvasContainer}>
       <canvas ref={canvasRef} width="1179" height="2229" />
-      <button onClick={shareImage} className={style.shareButton}>
+      <button onClick={shareCanvas} className={style.shareButton}>
         Share Image
       </button>
     </div>

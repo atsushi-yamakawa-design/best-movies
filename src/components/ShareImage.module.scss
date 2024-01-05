@@ -1,8 +1,12 @@
 .canvasContainer {
   width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
   canvas {
     width: 100%;
     height: auto;
+    display: block;
   }
   .shareButton {
     position: fixed;

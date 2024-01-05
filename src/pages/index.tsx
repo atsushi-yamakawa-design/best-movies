@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import style from "./page.module.scss";
 import Image from "next/image";
+import ShareImage from "../components/ShareImage";
 
 interface Movie {
   id: number;
@@ -100,9 +101,42 @@ export default function MoviePage() {
     setShowSelectedList(false);
   };
 
+  // シェア用背景画像
+  const backgroundUrl = "test/merge-images/best-movie-bg.png";
+
+  ////////////////////////ダミーデータ
+
+  // 映画の画像URLの配列
+  const movieImageUrls = [
+    "test/merge-images/mov1.jpeg",
+    "test/merge-images/mov2.jpeg",
+    "test/merge-images/mov3.jpeg"
+  ];
+
+  // 映画のタイトルの配列
+  const movieTitles = [
+    "Movie Title 1",
+    "Movie Title 2 Movie Title 2 Movie Title 2 Movie Title 2",
+    "日本語タイトル",
+    "Movie Title 4",
+    "日本語タイトル 日本語タイトル 日本語タイトル",
+    "Movie Title 5 Movie Title 5 Movie Title 5 Movie Title 5",
+    "Movie Title 5",
+    "Movie Title 5 Movie Title 5 Movie Title 5 Movie Title 5",
+    "Movie Title 5",
+    "Movie Title 5"
+  ];
+
+  ////////////////////////ダミーデータここまで
+
   return (
     <>
       <main className={style.searchPage}>
+        <ShareImage
+          backgroundUrl={backgroundUrl}
+          movieImageUrls={movieImageUrls}
+          movieTitles={movieTitles}
+        />
         <h1>⭐️わたしの2023映画ベスト10⭐️</h1>
         <div className={style.searchModule}>
           <div className={style.textInputWrapper}>

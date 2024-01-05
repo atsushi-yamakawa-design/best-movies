@@ -122,9 +122,11 @@ const ShareImage = ({
 
   const shareCanvas = async () => {
     if (navigator.share && canvasRef.current) {
+      alert("押せてる");
       const canvas = canvasRef.current;
       const shareText = createShareText(movieTitles);
       canvas.toBlob((blob) => {
+        console.log(blob);
         if (blob) {
           const file = new File([blob], "image.png", { type: "image/png" });
           navigator
@@ -135,7 +137,6 @@ const ShareImage = ({
             })
             .catch((error) => {
               console.error("Error sharing the image", error);
-              alert("shareCanvas内でエラーです");
             });
         }
       }, "image/png");

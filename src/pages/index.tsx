@@ -157,7 +157,6 @@ export default function MoviePage() {
               backgroundUrl={backgroundUrl}
               movieImageUrls={movieImageUrls}
               movieTitles={selectedMovieTitles}
-              shareText="テストです〜"
             />
             <button onClick={handleEditList} className={style.editList}>
               ← リストを編集する

@@ -5,14 +5,12 @@ interface ImagePageProps {
   backgroundUrl: string;
   movieImageUrls: string[];
   movieTitles: string[];
-  shareText: string;
 }
 
 const ShareImage = ({
   backgroundUrl,
   movieImageUrls,
-  movieTitles,
-  shareText
+  movieTitles
 }: ImagePageProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -82,7 +80,7 @@ const ShareImage = ({
 
                   movieTitles.slice(3).forEach((title, index) => {
                     const dynamicTitle = `${index + 4}. ${title}`;
-                    ctx.font = "bold 42px Arial";
+                    ctx.font = "bold 46px Arial";
                     const textX = 120;
                     let textY = startY;
                     const textHeight = wrapText(
@@ -91,11 +89,11 @@ const ShareImage = ({
                       textX,
                       textY,
                       960,
-                      60 // 行の高さ
+                      64 // 行の高さ
                     );
 
                     // 次のテキストのY座標を更新
-                    startY += textHeight + 20;
+                    startY += textHeight + 24;
                   });
                 }
               });
@@ -106,9 +104,19 @@ const ShareImage = ({
     }
   }, [backgroundUrl, movieImageUrls, movieTitles]);
 
+  // シェア用のテキスト生成
+  const createShareText = (movieTitles: string[]) => {
+    let shareText = "私のベスト映画！ ";
+    movieTitles.forEach((title, index) => {
+      shareText += `${index + 1}. ${title} `;
+    });
+    return shareText;
+  };
+
   const shareImage = async () => {
     if (navigator.share && canvasRef.current) {
       const canvas = canvasRef.current;
+      const shareText = createShareText(movieTitles);
       canvas.toBlob((blob) => {
         if (blob) {
           const file = new File([blob], "image.png", { type: "image/png" });

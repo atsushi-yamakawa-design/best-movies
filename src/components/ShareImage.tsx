@@ -125,9 +125,8 @@ const ShareImage = ({
       const canvas = canvasRef.current;
       const shareText = createShareText(movieTitles);
       canvas.toBlob((blob) => {
-        alert("処理開始");
         if (blob) {
-          alert("blobはOK");
+          console.log("blobはOK");
           const file = new File([blob], "image.png", { type: "image/png" });
           navigator
             .share({
@@ -136,23 +135,20 @@ const ShareImage = ({
               text: shareText
             })
             .then(() => {
-              alert("共有が開始されました"); // 共有が開始されたことを示すアラート
+              console.log("共有が開始されました"); // 共有が開始されたことを示すアラート
             })
             .catch((error) => {
               console.error("Error sharing the image", error);
-              alert("何かしらのエラー");
             });
         } else {
           // blobがnullの場合のエラーハンドリング
           console.error("Failed to convert the canvas to a blob");
-          alert("blobがnullです");
         }
       }, "image/png");
     } else {
       console.log(
         "Web Share API is not supported in your browser, or canvas is null."
       );
-      alert("Web Share APIはこのブラウザではサポートされていません");
     }
   };
 

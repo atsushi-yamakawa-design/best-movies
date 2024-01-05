@@ -140,20 +140,6 @@ export default function MoviePage() {
   //   "test/merge-images/mov3.jpeg"
   // ];
 
-  // 映画のタイトルの配列
-  const movieTitles = [
-    "Movie Title 1",
-    "Movie Title 2 Movie Title 2 Movie Title 2 Movie Title 2",
-    "日本語タイトル",
-    "Movie Title 4",
-    "日本語タイトル 日本語タイトル 日本語タイトル",
-    "Movie Title 5 Movie Title 5 Movie Title 5 Movie Title 5",
-    "Movie Title 5",
-    "Movie Title 5 Movie Title 5 Movie Title 5 Movie Title 5",
-    "Movie Title 5",
-    "Movie Title 5"
-  ];
-
   ////////////////////////ダミーデータここまで
 
   return (

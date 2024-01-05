@@ -142,6 +142,7 @@ const ShareImage = ({
       console.log(
         "Web Share API is not supported in your browser, or canvas is null."
       );
+      alert("うまく行ってない");
     }
   };
 

@@ -124,8 +124,10 @@ const ShareImage = ({
     if (navigator.share && canvasRef.current) {
       const canvas = canvasRef.current;
       const shareText = createShareText(movieTitles);
+      alert(canvasRef.current);
       canvas.toBlob((blob) => {
         if (blob) {
+          alert("blobはOK");
           const file = new File([blob], "image.png", { type: "image/png" });
           navigator
             .share({

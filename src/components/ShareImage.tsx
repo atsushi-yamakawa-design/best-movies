@@ -13,7 +13,6 @@ const ShareImage = ({
   movieTitles
 }: ImagePageProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  // const [downloadUrl, setDownloadUrl] = useState("");
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -25,18 +24,6 @@ const ShareImage = ({
         { x: 220, y: 400 },
         { x: 220, y: 710 },
         { x: 220, y: 1020 }
-      ];
-      const movieTitles = [
-        "Movie Title 1",
-        "Movie Title 2 Movie Title 2 Movie Title 2 Movie Title 2",
-        "日本語タイトル",
-        "Movie Title 4",
-        "日本語タイトル 日本語タイトル 日本語タイトル",
-        "Movie Title 5 Movie Title 5 Movie Title 5 Movie Title 5",
-        "Movie Title 5",
-        "Movie Title 5 Movie Title 5 Movie Title 5 Movie Title 5",
-        "Movie Title 5",
-        "Movie Title 5"
       ];
 
       if (ctx) {
@@ -78,7 +65,7 @@ const ShareImage = ({
                     title,
                     textX,
                     position.y,
-                    700,
+                    600,
                     60,
                     true // 実際に描画せずにテキストの高さを計算
                   );
@@ -93,7 +80,7 @@ const ShareImage = ({
 
                   movieTitles.slice(3).forEach((title, index) => {
                     const dynamicTitle = `${index + 4}. ${title}`;
-                    ctx.font = "bold 45px Arial";
+                    ctx.font = "bold 42px Arial";
                     const textX = 120;
                     let textY = startY;
                     const textHeight = wrapText(
@@ -101,7 +88,7 @@ const ShareImage = ({
                       dynamicTitle,
                       textX,
                       textY,
-                      980,
+                      960,
                       60 // 行の高さ
                     );
 
@@ -112,8 +99,6 @@ const ShareImage = ({
               });
             }
           });
-          // const dataUrl = canvas.toDataURL("image/png");
-          // setDownloadUrl(dataUrl);
         });
       }
     }
@@ -162,33 +147,54 @@ function wrapText(
   y: number,
   maxWidth: number,
   lineHeight: number,
-  dryRun: boolean = false // 追加した引数
+  dryRun: boolean = false
 ): number {
+  let newHeight = 0;
   const words = text.split(" ");
   let line = "";
-  let newHeight = 0; // 新しい高さを計算するための変数
 
   for (let n = 0; n < words.length; n++) {
-    const testLine = line + words[n] + " ";
+    const word = words[n];
+    const testLine = line + word + " ";
     const metrics = context.measureText(testLine);
     const testWidth = metrics.width;
 
     if (testWidth > maxWidth && n > 0) {
+      // 単語単位で改行
       if (!dryRun) {
         context.fillText(line, x, y);
       }
-      line = words[n] + " ";
+      line = word + " ";
       y += lineHeight;
-      newHeight += lineHeight; // 行の高さを加算
+      newHeight += lineHeight;
+    } else if (metrics.width > maxWidth) {
+      // 文字単位で改行
+      for (const char of word) {
+        const testLineWithChar = line + char;
+        const metricsWithChar = context.measureText(testLineWithChar);
+
+        if (metricsWithChar.width > maxWidth) {
+          if (!dryRun) {
+            context.fillText(line, x, y);
+          }
+          line = char;
+          y += lineHeight;
+          newHeight += lineHeight;
+        } else {
+          line = testLineWithChar;
+        }
+      }
+      line += " ";
     } else {
       line = testLine;
     }
   }
 
-  if (!dryRun) {
-    context.fillText(line, x, y);
+  // 最後の行を描画
+  if (!dryRun && line) {
+    context.fillText(line.trim(), x, y);
+    newHeight += lineHeight;
   }
-  newHeight += lineHeight; // 最後の行の高さを加算
 
-  return newHeight; // 新しい高さを返す
+  return newHeight;
 }

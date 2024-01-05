@@ -15,6 +15,9 @@ export default function MoviePage() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [selectedMovies, setSelectedMovies] = useState<Movie[]>([]);
   const [showSelectedList, setShowSelectedList] = useState(false);
+  const [showShareImage, setShowShareImage] = useState(false);
+  const [selectedMovieTitles, setSelectedMovieTitles] = useState<string[]>([]);
+  const [showSearchModule, setShowSearchModule] = useState(true);
 
   useEffect(() => {
     if (search) {
@@ -101,6 +104,15 @@ export default function MoviePage() {
     setShowSelectedList(false);
   };
 
+  // 共有するボタンをクリックした際の処理
+  const handleShareClick = () => {
+    // 選択中の映画のタイトルを設定
+    setSelectedMovieTitles(selectedMovies.map((movie) => movie.title));
+    setShowShareImage(true);
+    setShowSelectedList(false); // 選択中リストのモジュールを閉じる
+    setShowSearchModule(false); // 検索モジュールを非表示にする
+  };
+
   // シェア用背景画像
   const backgroundUrl = "test/merge-images/best-movie-bg.png";
 
@@ -131,66 +143,82 @@ export default function MoviePage() {
 
   return (
     <>
-      <ShareImage
-        backgroundUrl={backgroundUrl}
-        movieImageUrls={movieImageUrls}
-        movieTitles={movieTitles}
-      />
+      {showShareImage && (
+        <ShareImage
+          backgroundUrl={backgroundUrl}
+          movieImageUrls={movieImageUrls}
+          movieTitles={selectedMovieTitles}
+        />
+      )}
       <main className={style.searchPage}>
-        <h1>⭐️わたしの2023映画ベスト10⭐️</h1>
-        <div className={style.searchModule}>
-          <div className={style.textInputWrapper}>
-            <div className={style.searchContainer}>
-              <input
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="タイトルを入力"
-                className={style.textInput}
-              />
-              {search && <button onClick={clearSearch}>×</button>}
+        {showSearchModule && ( // 検索モジュールの表示/非表示を制御
+          <>
+            <h1>⭐️わたしの2023映画ベスト10⭐️</h1>
+            <div className={style.searchModule}>
+              <div className={style.textInputWrapper}>
+                <div className={style.searchContainer}>
+                  <input
+                    type="text"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="タイトルを入力"
+                    className={style.textInput}
+                  />
+                  {search && <button onClick={clearSearch}>×</button>}
+                </div>
+                {selectedMovies.length > 0 && (
+                  <button
+                    onClick={handleShowSelectedList}
+                    className={style.movieCountButton}>
+                    {selectedMovies.length}件選択中
+                  </button>
+                )}
+              </div>
+              {movies.length > 0 ? (
+                <ul className={style.movieList}>
+                  {movies.map((movie) => (
+                    <li
+                      key={movie.id}
+                      onClick={() => handleMovieSelect(movie)}
+                      className={
+                        selectedMovies.find((m) => m.id === movie.id)
+                          ? style.selected
+                          : ""
+                      }>
+                      <div className={style.movieText}>
+                        <p className={style.movieTitle}>{movie.title}</p>
+                        {selectedMovies.find((m) => m.id === movie.id) && (
+                          <p className={style.selectedText}>選択中</p>
+                        )}
+                      </div>
+                      {movie.poster_path && (
+                        <Image
+                          src={`https://image.tmdb.org/t/p/w200/${movie.poster_path}`}
+                          alt={movie.title}
+                          width={165}
+                          height={247}
+                          unoptimized
+                        />
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className={style.emptyText}>検索結果は0件です</p>
+              )}
             </div>
-            {selectedMovies.length > 0 && (
-              <button
-                onClick={handleShowSelectedList}
-                className={style.movieCountButton}>
-                {selectedMovies.length}件選択中
-              </button>
-            )}
-          </div>
-          {movies.length > 0 ? (
-            <ul className={style.movieList}>
-              {movies.map((movie) => (
-                <li
-                  key={movie.id}
-                  onClick={() => handleMovieSelect(movie)}
-                  className={
-                    selectedMovies.find((m) => m.id === movie.id)
-                      ? style.selected
-                      : ""
-                  }>
-                  <div className={style.movieText}>
-                    <p className={style.movieTitle}>{movie.title}</p>
-                    {selectedMovies.find((m) => m.id === movie.id) && (
-                      <p className={style.selectedText}>選択中</p>
-                    )}
-                  </div>
-                  {movie.poster_path && (
-                    <Image
-                      src={`https://image.tmdb.org/t/p/w200/${movie.poster_path}`}
-                      alt={movie.title}
-                      width={165}
-                      height={247}
-                      unoptimized
-                    />
-                  )}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className={style.emptyText}>検索結果は0件です</p>
-          )}
-        </div>
+            <div className={style.credit}>
+              movie database by
+              {/* <img src="/icon/tmdb_logo.svg" alt="TMDB" /> */}
+              <Image
+                src="/icon/tmdb_logo.svg"
+                alt="TMDB"
+                width={80}
+                height={10}
+              />
+            </div>
+          </>
+        )}
         {showSelectedList && (
           <div className={style.selectedListModalWrapper}>
             <div className={style.selectedListModal}>
@@ -229,16 +257,15 @@ export default function MoviePage() {
               </ul>
               <div className={style.buttonWrapper}>
                 <button onClick={handleCloseSelectedList}>選択に戻る</button>
-                <button onClick={handleCloseSelectedList}>共有する→</button>
+                <button
+                  onClick={handleShareClick}
+                  disabled={selectedMovies.length !== 10}>
+                  共有する→
+                </button>
               </div>
             </div>
           </div>
         )}
-        <div className={style.credit}>
-          movie database by
-          {/* <img src="/icon/tmdb_logo.svg" alt="TMDB" /> */}
-          <Image src="/icon/tmdb_logo.svg" alt="TMDB" width={80} height={10} />
-        </div>
       </main>
     </>
   );

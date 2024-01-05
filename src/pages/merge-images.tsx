@@ -74,7 +74,7 @@ const ImagePage = () => {
                   const dynamicTitle = `${index + 1}. ${title}`;
                   ctx.font = "bold 45px Arial";
                   const textX = 120;
-                  let textY = 800 + 170 * 3 + 100 * (index - 3);
+                  let textY = 880 + 170 * 3 + 100 * (index - 3);
                   wrapText(ctx, dynamicTitle, textX, textY, 700, 45); // 折り返し関数を使用
                 }
               });

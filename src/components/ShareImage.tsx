@@ -13,7 +13,7 @@ const ShareImage = ({
   movieTitles
 }: ImagePageProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [downloadUrl, setDownloadUrl] = useState("");
+  // const [downloadUrl, setDownloadUrl] = useState("");
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -85,7 +85,7 @@ const ShareImage = ({
 
                   // テキストを画像の中央に配置
                   const textY =
-                    position.y + imageHeight / 2 - textHeight / 2 + 30;
+                    position.y + imageHeight / 2 - textHeight / 2 + 40;
                   wrapText(ctx, title, textX, textY, 700, 60); // 実際に描画
                 } else {
                   // 4番目以降のテキスト
@@ -112,8 +112,8 @@ const ShareImage = ({
               });
             }
           });
-          const dataUrl = canvas.toDataURL("image/png");
-          setDownloadUrl(dataUrl);
+          // const dataUrl = canvas.toDataURL("image/png");
+          // setDownloadUrl(dataUrl);
         });
       }
     }
@@ -143,7 +143,6 @@ const ShareImage = ({
     }
   };
 
-  // シェアボタンの追加
   return (
     <div className={style.canvasContainer}>
       <canvas ref={canvasRef} width="1179" height="2229" />

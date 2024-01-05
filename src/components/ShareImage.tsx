@@ -120,30 +120,34 @@ const ShareImage = ({
     return shareText + shareTextCredit;
   };
 
+  // const shareCanvas = async () => {
+  //   if (navigator.share && canvasRef.current) {
+  //     const canvas = canvasRef.current;
+  //     const shareText = createShareText(movieTitles);
+  //     canvas.toBlob((blob) => {
+  //       if (blob) {
+  //         const file = new File([blob], "image.png", { type: "image/png" });
+  //         navigator
+  //           .share({
+  //             files: [file],
+  //             title: "My Best Movies 2023 ",
+  //             text: shareText
+  //           })
+  //           .catch((error) => {
+  //             console.error("Error sharing the image", error);
+  //           });
+  //       }
+  //     }, "image/png");
+  //   } else {
+  //     console.log(
+  //       "Web Share API is not supported in your browser, or canvas is null."
+  //     );
+  //     alert("うまく行ってない");
+  //   }
+  // };
+
   const shareCanvas = async () => {
-    if (navigator.share && canvasRef.current) {
-      const canvas = canvasRef.current;
-      const shareText = createShareText(movieTitles);
-      canvas.toBlob((blob) => {
-        if (blob) {
-          const file = new File([blob], "image.png", { type: "image/png" });
-          navigator
-            .share({
-              files: [file],
-              title: "My Best Movies 2023 ",
-              text: shareText
-            })
-            .catch((error) => {
-              console.error("Error sharing the image", error);
-            });
-        }
-      }, "image/png");
-    } else {
-      console.log(
-        "Web Share API is not supported in your browser, or canvas is null."
-      );
-      alert("うまく行ってない");
-    }
+    alert("shareCanvas押された");
   };
 
   return (

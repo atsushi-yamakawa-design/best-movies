@@ -11,7 +11,7 @@
   "dependencies": {
     "@types/react-beautiful-dnd": "^13.1.8",
     "axios": "^1.6.3",
-    "merge-images": "^2.0.0",
+    "canvas": "^2.11.2",
     "next": "14.0.4",
     "react": "^18",
     "react-beautiful-dnd": "^13.1.1",

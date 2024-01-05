@@ -18,6 +18,7 @@ export default function MoviePage() {
   const [showShareImage, setShowShareImage] = useState(false);
   const [selectedMovieTitles, setSelectedMovieTitles] = useState<string[]>([]);
   const [showSearchModule, setShowSearchModule] = useState(true);
+  const [movieImageUrls, setMovieImageUrls] = useState<string[]>([]); // 映画の画像URLの配列の状態
 
   useEffect(() => {
     if (search) {
@@ -108,6 +109,13 @@ export default function MoviePage() {
   const handleShareClick = () => {
     // 選択中の映画のタイトルを設定
     setSelectedMovieTitles(selectedMovies.map((movie) => movie.title));
+
+    // 選択中の映画の画像URLを設定
+    const urls = selectedMovies.map(
+      (movie) => `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
+    );
+    setMovieImageUrls(urls);
+
     setShowShareImage(true);
     setShowSelectedList(false); // 選択中リストのモジュールを閉じる
     setShowSearchModule(false); // 検索モジュールを非表示にする
@@ -126,11 +134,11 @@ export default function MoviePage() {
   ////////////////////////ダミーデータ
 
   // 映画の画像URLの配列
-  const movieImageUrls = [
-    "test/merge-images/mov1.jpeg",
-    "test/merge-images/mov2.jpeg",
-    "test/merge-images/mov3.jpeg"
-  ];
+  // const movieImageUrls = [
+  //   "test/merge-images/mov1.jpeg",
+  //   "test/merge-images/mov2.jpeg",
+  //   "test/merge-images/mov3.jpeg"
+  // ];
 
   // 映画のタイトルの配列
   const movieTitles = [
@@ -272,7 +280,6 @@ export default function MoviePage() {
         )}
         <div className={style.credit}>
           movie database by
-          {/* <img src="/icon/tmdb_logo.svg" alt="TMDB" /> */}
           <Image src="/icon/tmdb_logo.svg" alt="TMDB" width={80} height={10} />
         </div>
       </main>

@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState } from "react";
+import style from "./ShareImage.module.scss";
 
 interface ImagePageProps {
   backgroundUrl: string;
@@ -144,9 +145,11 @@ const ShareImage = ({
 
   // シェアボタンの追加
   return (
-    <div>
+    <div className={style.canvasContainer}>
       <canvas ref={canvasRef} width="1179" height="2229" />
-      <button onClick={shareImage}>Share Image</button>
+      <button onClick={shareImage} className={style.shareButton}>
+        Share Image
+      </button>
     </div>
   );
 };

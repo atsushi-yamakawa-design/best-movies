@@ -1,0 +1,15 @@
+.canvasContainer {
+  width: 100%;
+  canvas {
+    width: 100%;
+    height: auto;
+  }
+  .shareButton {
+    position: fixed;
+    width: 10em;
+    height: 3em;
+    bottom: 1em;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}

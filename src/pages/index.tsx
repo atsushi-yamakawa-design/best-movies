@@ -131,12 +131,12 @@ export default function MoviePage() {
 
   return (
     <>
+      <ShareImage
+        backgroundUrl={backgroundUrl}
+        movieImageUrls={movieImageUrls}
+        movieTitles={movieTitles}
+      />
       <main className={style.searchPage}>
-        <ShareImage
-          backgroundUrl={backgroundUrl}
-          movieImageUrls={movieImageUrls}
-          movieTitles={movieTitles}
-        />
         <h1>⭐️わたしの2023映画ベスト10⭐️</h1>
         <div className={style.searchModule}>
           <div className={style.textInputWrapper}>

@@ -159,7 +159,7 @@ export default function MoviePage() {
               movieTitles={selectedMovieTitles}
             />
             <button onClick={handleEditList} className={style.editList}>
-              ← リストを選び直す
+              ← リストを編集する
             </button>
           </>
         )}
@@ -225,7 +225,7 @@ export default function MoviePage() {
               <button
                 className={style.modalCloseButton}
                 onClick={handleCloseSelectedList}>
-                X
+                ×
               </button>
               <div className={style.selectedListModalHeader}>
                 <p className={style.selectedCount}>
@@ -256,7 +256,11 @@ export default function MoviePage() {
                 ))}
               </ul>
               <div className={style.buttonWrapper}>
-                <button onClick={handleCloseSelectedList}>選択に戻る</button>
+                <button
+                  onClick={handleCloseSelectedList}
+                  className={style.chooseAgainButton}>
+                  選択に戻る
+                </button>
                 <button
                   onClick={handleShareClick}
                   disabled={selectedMovies.length !== 10}>

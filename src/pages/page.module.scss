@@ -347,8 +347,11 @@
       position: relative;
       .modalCloseButton {
         position: absolute;
-        top: -2em;
-        right: 1em;
+        top: -1.2em;
+        right: 0.3em;
+        font-size: 1.8em;
+        background: none;
+        color: #fff;
       }
       .selectedListModalHeader {
         display: flex;
@@ -365,6 +368,7 @@
       .selectedList {
         margin-top: 0.5em;
         overflow-y: scroll;
+        max-height: calc(100dvh - 19px - 5.5em - 46px);
         li {
           padding: 0.6em 0;
           display: flex;
@@ -410,6 +414,9 @@
         display: flex;
         justify-content: center;
         gap: 1em;
+        .chooseAgainButton {
+          background: none;
+        }
         button {
           padding: 0.4em 1em;
         }

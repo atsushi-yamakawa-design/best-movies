@@ -374,12 +374,8 @@
           display: flex;
           justify-content: space-between;
           align-items: center;
-          // &:active {
-          //   background-color: aquamarine;
-          // }
           .sortButtons {
             display: flex;
-            gap: 0.2em;
             button {
               background: none;
               font-size: 1.2em;
@@ -388,6 +384,7 @@
           .selectedTitle {
             flex: 1;
             margin-left: 1em;
+            flex-shrink: 0;
           }
           &:first-child {
             .selectedTitle::before {

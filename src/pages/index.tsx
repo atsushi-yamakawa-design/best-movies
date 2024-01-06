@@ -37,34 +37,58 @@ export default function MoviePage() {
   useEffect(() => {
     if (search) {
       const searchKatakana = toKatakana(search); // ひらがなをカタカナに変換
-      const movieSearchURL = `/api/3/search/movie?api_key=${
+      const movieSearchURLHiragana = `/api/3/search/movie?api_key=${
+        process.env.NEXT_PUBLIC_TMDB_API_KEY
+      }&language=ja&region=JP&query=${encodeURIComponent(search)}`;
+      const movieSearchURLKatakana = `/api/3/search/movie?api_key=${
         process.env.NEXT_PUBLIC_TMDB_API_KEY
       }&language=ja&region=JP&query=${encodeURIComponent(searchKatakana)}`;
-      const personSearchURL = `/api/3/search/person?api_key=${
+
+      const personSearchURLHiragana = `/api/3/search/person?api_key=${
+        process.env.NEXT_PUBLIC_TMDB_API_KEY
+      }&language=ja&region=JP&query=${encodeURIComponent(search)}`;
+      const personSearchURLKatakana = `/api/3/search/person?api_key=${
         process.env.NEXT_PUBLIC_TMDB_API_KEY
       }&language=ja&region=JP&query=${encodeURIComponent(searchKatakana)}`;
 
-      Promise.all([axios.get(movieSearchURL), axios.get(personSearchURL)])
-        .then(([movieResponse, personResponse]) => {
-          const moviesFromTitle = movieResponse.data.results;
-          const moviesFromPeople = personResponse.data.results.flatMap(
-            (person: Person) => person.known_for
-          );
+      Promise.all([
+        axios.get(movieSearchURLHiragana),
+        axios.get(movieSearchURLKatakana),
+        axios.get(personSearchURLHiragana),
+        axios.get(personSearchURLKatakana)
+      ])
+        .then(
+          ([
+            movieResponseHiragana,
+            movieResponseKatakana,
+            personResponseHiragana,
+            personResponseKatakana
+          ]) => {
+            const moviesFromTitleHiragana = movieResponseHiragana.data.results;
+            const moviesFromTitleKatakana = movieResponseKatakana.data.results;
+            const moviesFromPeopleHiragana =
+              personResponseHiragana.data.results.flatMap(
+                (person: Person) => person.known_for
+              );
+            const moviesFromPeopleKatakana =
+              personResponseKatakana.data.results.flatMap(
+                (person: Person) => person.known_for
+              );
 
-          // 重複を排除する処理
-          const uniqueMoviesFromPeople: Movie[] = [];
-          moviesFromPeople.forEach((movie: Movie) => {
-            if (!uniqueMoviesFromPeople.some((m) => m.id === movie.id)) {
-              uniqueMoviesFromPeople.push(movie);
-            }
-          });
+            // 重複を排除する処理
+            const allMovies = [
+              ...moviesFromTitleHiragana,
+              ...moviesFromTitleKatakana,
+              ...moviesFromPeopleHiragana,
+              ...moviesFromPeopleKatakana
+            ];
+            const uniqueMovies = Array.from(
+              new Set(allMovies.map((m) => m.id))
+            ).map((id) => allMovies.find((m) => m.id === id));
 
-          const finalMoviesList = [
-            ...moviesFromTitle,
-            ...uniqueMoviesFromPeople
-          ];
-          setMovies(finalMoviesList);
-        })
+            setMovies(uniqueMovies);
+          }
+        )
         .catch((error) => console.error(error));
     }
   }, [search]);

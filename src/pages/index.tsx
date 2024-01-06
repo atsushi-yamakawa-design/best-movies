@@ -19,6 +19,9 @@ interface Movie {
   title: string;
   poster_path?: string;
 }
+interface Person {
+  known_for: Movie[];
+}
 
 export default function MoviePage() {
   const [search, setSearch] = useState("");
@@ -32,18 +35,33 @@ export default function MoviePage() {
 
   useEffect(() => {
     if (search) {
-      axios
-        .get(
-          `/api/3/search/movie?api_key=${
-            process.env.NEXT_PUBLIC_TMDB_API_KEY
-          }&language=ja&region=JP&query=${encodeURIComponent(search)}`
-        )
-        .then((response) => {
-          setMovies(response.data.results);
+      const searchKatakana = toKatakana(search); // ひらがなをカタカナに変換
+      const movieSearchURL = `/api/3/search/movie?api_key=${
+        process.env.NEXT_PUBLIC_TMDB_API_KEY
+      }&language=ja&region=JP&query=${encodeURIComponent(searchKatakana)}`;
+      const personSearchURL = `/api/3/search/person?api_key=${
+        process.env.NEXT_PUBLIC_TMDB_API_KEY
+      }&language=ja&region=JP&query=${encodeURIComponent(searchKatakana)}`;
+
+      Promise.all([axios.get(movieSearchURL), axios.get(personSearchURL)])
+        .then(([movieResponse, personResponse]) => {
+          const moviesFromTitle = movieResponse.data.results;
+          const moviesFromPeople = personResponse.data.results.flatMap(
+            (person: Person) => person.known_for
+          );
+          setMovies([...moviesFromTitle, ...moviesFromPeople]);
         })
         .catch((error) => console.error(error));
     }
   }, [search]);
+
+  //ひらがな→カタカナ検索ロジック
+  function toKatakana(str: String) {
+    return str.replace(/[\u3041-\u3096]/g, function (match) {
+      var char = match.charCodeAt(0) + 0x60;
+      return String.fromCharCode(char);
+    });
+  }
 
   // 検索窓をクリアする
   const clearSearch = () => {

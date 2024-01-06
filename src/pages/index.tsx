@@ -163,15 +163,23 @@ export default function MoviePage() {
     setShowSelectedList(false);
   };
 
+  // 画像パスが存在するかどうかの確認
+  const getImageUrl = (posterPath: String) => {
+    return posterPath
+      ? `https://image.tmdb.org/t/p/w500/${posterPath}`
+      : "images/dummy.png"; // ダミー画像のパス
+  };
+
   // 共有するボタンをクリックした際の処理
   const handleShareClick = () => {
     // 選択中の映画のタイトルを設定
     setSelectedMovieTitles(selectedMovies.map((movie) => movie.title));
 
     // 選択中の映画の画像URLを設定
-    const urls = selectedMovies.map(
-      (movie) => `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
+    const urls = selectedMovies.map((movie) =>
+      getImageUrl(movie.poster_path || "")
     );
+
     setMovieImageUrls(urls);
 
     setShowShareImage(true);
@@ -245,15 +253,13 @@ export default function MoviePage() {
                         <p className={style.selectedText}>選択中</p>
                       )}
                     </div>
-                    {movie.poster_path && (
-                      <Image
-                        src={`https://image.tmdb.org/t/p/w200/${movie.poster_path}`}
-                        alt={movie.title}
-                        width={165}
-                        height={247}
-                        unoptimized
-                      />
-                    )}
+                    <Image
+                      src={getImageUrl(movie.poster_path || "")}
+                      alt={movie.title}
+                      width={165}
+                      height={247}
+                      unoptimized
+                    />
                   </li>
                 ))}
               </ul>

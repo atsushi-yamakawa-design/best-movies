@@ -347,8 +347,8 @@
       position: relative;
       .modalCloseButton {
         position: absolute;
-        top: -1.2em;
-        right: 0.3em;
+        top: -40px;
+        right: 10px;
         font-size: 1.8em;
         background: none;
         color: #fff;
@@ -366,9 +366,9 @@
         }
       }
       .selectedList {
-        margin-top: 0.5em;
+        margin-top: 1em;
         overflow-y: scroll;
-        max-height: calc(100dvh - 19px - 5.5em - 46px);
+        max-height: calc(100dvh - 19px - 6em - 60px);
         li {
           padding: 0.6em 0;
           display: flex;
@@ -379,10 +379,10 @@
           // }
           .sortButtons {
             display: flex;
-            // flex-direction: column;
             gap: 0.2em;
             button {
               background: none;
+              font-size: 1.2em;
             }
           }
           .selectedTitle {
@@ -404,7 +404,8 @@
             margin-right: 0.2em;
           }
           .removeButton {
-            font-size: 1.4em;
+            font-size: 1.2em;
+            background: none;
           }
         }
       }
@@ -414,11 +415,17 @@
         display: flex;
         justify-content: center;
         gap: 1em;
+        button {
+          height: 3em;
+          width: 9em;
+        }
         .chooseAgainButton {
           background: none;
         }
-        button {
-          padding: 0.4em 1em;
+        .generateButton {
+          .icon {
+            margin-left: 0.3em;
+          }
         }
       }
     }
@@ -433,11 +440,13 @@
   }
   .editList {
     height: 3em;
-    width: 8em;
+    width: 6em;
     position: fixed;
     bottom: 1em;
     left: 1em;
     background-color: #fff;
-    font-size: 0.6em;
+    .icon {
+      margin-right: 0.3em;
+    }
   }
 }

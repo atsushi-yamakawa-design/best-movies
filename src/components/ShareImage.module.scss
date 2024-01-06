@@ -15,6 +15,9 @@
     bottom: 1em;
     left: 50%;
     transform: translateX(-50%);
+    .icon {
+      margin-left: 0.3em;
+    }
   }
   .downloadButton {
     position: fixed;

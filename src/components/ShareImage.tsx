@@ -1,6 +1,14 @@
 import { useRef, useEffect, useState } from "react";
 import style from "./ShareImage.module.scss";
 
+// アイコン素材
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faArrowUpFromBracket,
+  faCircle,
+  faCircleDown
+} from "@fortawesome/free-solid-svg-icons";
+
 interface ImagePageProps {
   backgroundUrl: string;
   movieImageUrls: string[];
@@ -180,9 +188,10 @@ const ShareImage = ({
       <canvas ref={canvasRef} width="1179" height="2229" />
       <button onClick={shareCanvas} className={style.shareButton}>
         共有する
+        <FontAwesomeIcon icon={faArrowUpFromBracket} className={style.icon} />
       </button>
       <button onClick={downloadCanvas} className={style.downloadButton}>
-        ↓
+        <FontAwesomeIcon icon={faCircleDown} className={style.icon} />
       </button>
     </div>
   );

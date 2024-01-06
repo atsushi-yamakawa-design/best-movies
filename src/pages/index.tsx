@@ -4,6 +4,16 @@ import style from "./page.module.scss";
 import Image from "next/image";
 import ShareImage from "../components/ShareImage";
 
+// アイコン素材
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faArrowLeft,
+  faArrowRight,
+  faXmark,
+  faCircleDown,
+  faCircleUp
+} from "@fortawesome/free-solid-svg-icons";
+
 interface Movie {
   id: number;
   title: string;
@@ -54,22 +64,14 @@ export default function MoviePage() {
 
   // 選択解除処理
   const handleRemoveMovie = (movieId: number) => {
-    if (
-      window.confirm(
-        `${
-          selectedMovies.find((m) => m.id === movieId)?.title
-        }をリストから外しますか？`
-      )
-    ) {
-      const updatedSelectedMovies = selectedMovies.filter(
-        (m) => m.id !== movieId
-      );
-      setSelectedMovies(updatedSelectedMovies);
+    const updatedSelectedMovies = selectedMovies.filter(
+      (m) => m.id !== movieId
+    );
+    setSelectedMovies(updatedSelectedMovies);
 
-      // 選択件数が0になったらモーダルを閉じる
-      if (updatedSelectedMovies.length === 0) {
-        handleCloseSelectedList();
-      }
+    // 選択件数が0になったらモーダルを閉じる
+    if (updatedSelectedMovies.length === 0) {
+      handleCloseSelectedList();
     }
   };
 
@@ -153,7 +155,8 @@ export default function MoviePage() {
               movieTitles={selectedMovieTitles}
             />
             <button onClick={handleEditList} className={style.editList}>
-              ← 編集
+              <FontAwesomeIcon icon={faArrowLeft} className={style.icon} />
+              編集
             </button>
           </>
         )}
@@ -219,7 +222,7 @@ export default function MoviePage() {
               <button
                 className={style.modalCloseButton}
                 onClick={handleCloseSelectedList}>
-                ×
+                <FontAwesomeIcon icon={faXmark} className={style.icon} />
               </button>
               <div className={style.selectedListModalHeader}>
                 <p className={style.selectedCount}>
@@ -236,15 +239,23 @@ export default function MoviePage() {
                   <li key={movie.id}>
                     <div className={style.sortButtons}>
                       <button onClick={() => moveMovie(movie.id, -1)}>
-                        ⬆️
+                        <FontAwesomeIcon
+                          icon={faCircleUp}
+                          className={style.icon}
+                        />
                       </button>
-                      <button onClick={() => moveMovie(movie.id, 1)}>⬇️</button>
+                      <button onClick={() => moveMovie(movie.id, 1)}>
+                        <FontAwesomeIcon
+                          icon={faCircleDown}
+                          className={style.icon}
+                        />
+                      </button>
                     </div>
                     <p className={style.selectedTitle}>{movie.title}</p>
                     <button
                       className={style.removeButton}
                       onClick={() => handleRemoveMovie(movie.id)}>
-                      ×
+                      <FontAwesomeIcon icon={faXmark} className={style.icon} />
                     </button>
                   </li>
                 ))}
@@ -257,8 +268,10 @@ export default function MoviePage() {
                 </button>
                 <button
                   onClick={handleShareClick}
-                  disabled={selectedMovies.length !== 10}>
-                  共有する→
+                  disabled={selectedMovies.length !== 10}
+                  className={style.generateButton}>
+                  画像を生成
+                  <FontAwesomeIcon icon={faArrowRight} className={style.icon} />
                 </button>
               </div>
             </div>

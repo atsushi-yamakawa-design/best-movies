@@ -74,13 +74,13 @@ const ShareImage = ({
               (images[index + 1].naturalHeight /
                 images[index + 1].naturalWidth);
             const textY = position.y + imageHeight / 2 - 20;
-            wrapText(ctx, title, textX, textY, 640, 70);
+            wrapText(ctx, title || "（タイトルなし）", textX, textY, 640, 70);
           });
 
           // 4番目以降のテキストを描画
           let startY = 840 + 170 * 3;
           movieTitles.slice(3).forEach((title, index) => {
-            const dynamicTitle = `${index + 4}. ${title}`;
+            const dynamicTitle = `${index + 4}. ${title || "（タイトルなし）"}`;
             ctx.font = "bold 46px Arial";
             const textX = 120;
             let textY = startY;

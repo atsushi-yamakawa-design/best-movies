@@ -16,4 +16,11 @@
     left: 50%;
     transform: translateX(-50%);
   }
+  .downloadButton {
+    position: fixed;
+    width: 3em;
+    height: 3em;
+    bottom: 1em;
+    right: 2em;
+  }
 }

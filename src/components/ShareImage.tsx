@@ -32,7 +32,7 @@ const ShareImage = ({
           imagesToLoad.map((src) => {
             return new Promise<HTMLImageElement>((resolve) => {
               const img = new Image();
-              img.crossOrigin = "anonymous";
+              img.crossOrigin = "anonymous"; //CORSエラー対策
               img.onload = () => resolve(img);
               img.src = src;
             });
@@ -127,7 +127,6 @@ const ShareImage = ({
       const shareText = createShareText(movieTitles);
       canvas.toBlob((blob) => {
         if (blob) {
-          console.log("blobはOK");
           const file = new File([blob], "image.png", { type: "image/png" });
           navigator
             .share({
@@ -142,14 +141,37 @@ const ShareImage = ({
               console.error("Error sharing the image", error);
             });
         } else {
-          // blobがnullの場合のエラーハンドリング
+          alert("Blobがnullです");
           console.error("Failed to convert the canvas to a blob");
         }
       }, "image/png");
     } else {
+      alert("モバイルデバイスのみ対応しています");
       console.log(
         "Web Share API is not supported in your browser, or canvas is null."
       );
+    }
+  };
+
+  const downloadCanvas = () => {
+    if (canvasRef.current) {
+      const canvas = canvasRef.current;
+      // キャンバスからデータURLを作成
+      const imageUrl = canvas.toDataURL("image/png");
+
+      // リンクを作成し、URLとダウンロード属性を設定
+      const link = document.createElement("a");
+      link.href = imageUrl;
+      link.download = "my-best-movies.png";
+
+      // ドキュメントに追加してダウンロードをトリガー
+      document.body.appendChild(link);
+      link.click();
+
+      // 後処理
+      document.body.removeChild(link);
+    } else {
+      console.log("キャンバスがnullです。画像をダウンロードできません。");
     }
   };
 
@@ -158,6 +180,9 @@ const ShareImage = ({
       <canvas ref={canvasRef} width="1179" height="2229" />
       <button onClick={shareCanvas} className={style.shareButton}>
         共有する
+      </button>
+      <button onClick={downloadCanvas} className={style.downloadButton}>
+        ↓
       </button>
     </div>
   );

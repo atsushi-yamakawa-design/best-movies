@@ -153,7 +153,7 @@ export default function MoviePage() {
               movieTitles={selectedMovieTitles}
             />
             <button onClick={handleEditList} className={style.editList}>
-              ← リストを編集する
+              ← 編集
             </button>
           </>
         )}

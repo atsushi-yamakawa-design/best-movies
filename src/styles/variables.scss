@@ -1,0 +1,54 @@
+// プリミティブカラーの定義
+$color-black: #101417;
+$color-white: #fff;
+$color-primary: #bfff00;
+$color-primary-deep: #82ae00;
+$color-primary-pale: #dfff7e;
+$color-primary-bg: #f5fddd;
+$color-secondary: #6c757d;
+$color-success: #28a745;
+$color-danger: #dc3545;
+$color-warning: #ffc107;
+$color-info: #17a2b8;
+$color-light: #f8f9fa;
+$color-gray: #4a525b;
+$color-gray-pale: #798188;
+$color-gray-very-pale: #e1e7ec;
+
+// テキスト用のセマンティックカラー
+$text-color-primary: $color-black;
+$text-color-secondary: $color-gray-pale;
+
+// ボーダー用のセマンティックカラー
+$border-color: $color-gray-very-pale;
+
+// ボタン用のセマンティックカラー
+$button-bg-primary: $color-primary;
+$button-bg-secondary: $color-gray-very-pale;
+$button-text-primary: $color-light;
+$button-text-secondary: $color-light;
+
+@mixin primaryButton {
+  color: $text-color-primary;
+  background-color: $button-bg-primary;
+  height: 3em;
+  border-radius: 1.5em;
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+@mixin secondaryButton {
+  color: $text-color-primary;
+  background-color: $button-bg-secondary;
+  height: 3em;
+  border-radius: 1.5em;
+}
+
+@mixin textButton {
+  color: $text-color-primary;
+  background: none;
+  border-bottom: solid 1px $text-color-primary;
+  padding: 0;
+}

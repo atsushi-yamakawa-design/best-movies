@@ -1,11 +1,4 @@
-.main {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  padding: 6rem;
-  min-height: 100vh;
-}
+@import "../styles/variables.scss";
 
 .description {
   display: inherit;
@@ -272,12 +265,15 @@
       }
 
       .movieCountButton {
+        @include primaryButton;
         position: absolute;
         width: 8em;
-        height: 2.4em;
         right: 0;
-        bottom: -3em;
+        bottom: -3.6em;
         z-index: 999;
+        .icon {
+          margin-left: 0.3em;
+        }
       }
     }
     .movieList {
@@ -292,7 +288,7 @@
           width: 80%;
           .selectedText {
             font-size: 0.8em;
-            color: #666;
+            color: $color-primary-deep;
           }
         }
         img {
@@ -300,7 +296,7 @@
         }
       }
       .selected {
-        background-color: #eef2f2;
+        background-color: $color-primary-bg;
       }
     }
     .emptyText {
@@ -341,7 +337,7 @@
     .selectedListModal {
       width: 100%;
       background-color: #fff;
-      padding: 1em 0.6em;
+      padding: 1em 0;
       border-radius: 1em 1em 0 0;
       max-height: 100dvh;
       position: relative;
@@ -357,20 +353,24 @@
         display: flex;
         gap: 1em;
         justify-content: space-between;
+        padding: 0 0.6em;
         .selectedCount {
           font-size: 0.7em;
         }
         .removeAllButton {
+          @include textButton;
           font-size: 0.7em;
-          background-color: rgb(226, 226, 226);
         }
       }
       .selectedList {
         margin-top: 1em;
         overflow-y: scroll;
         max-height: calc(100dvh - 19px - 6em - 60px);
+        border-top: 1px solid $border-color;
+        border-bottom: 1px solid $border-color;
+        // background-color: #eef2f2;
         li {
-          padding: 0.6em 0;
+          padding: 0.6em 0.6em;
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -380,6 +380,7 @@
               background: none;
               font-size: 1.2em;
               padding: 0.2em 0.4em;
+              color: $color-gray;
             }
           }
           .selectedTitle {
@@ -413,15 +414,24 @@
         justify-content: center;
         gap: 1em;
         button {
-          height: 3em;
           width: 9em;
         }
         .chooseAgainButton {
-          background: none;
+          @include secondaryButton;
         }
         .generateButton {
+          @include primaryButton;
+          position: relative;
           .icon {
             margin-left: 0.3em;
+          }
+          span {
+            position: absolute;
+            font-size: 0.7em;
+            bottom: -2em;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
           }
         }
       }
@@ -435,15 +445,17 @@
       margin: -0.8em 0 0 0.5em;
     }
   }
-  .editList {
-    height: 3em;
-    width: 6em;
-    position: fixed;
-    bottom: 1em;
-    left: 1em;
-    background-color: #fff;
-    .icon {
-      margin-right: 0.3em;
+  .shareImagewrapper {
+    .editList {
+      @include secondaryButton;
+      width: 6em;
+      position: fixed;
+      bottom: 1em;
+      left: 1em;
+      background-color: #fff;
+      .icon {
+        margin-right: 0.3em;
+      }
     }
   }
 }

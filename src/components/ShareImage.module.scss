@@ -1,3 +1,5 @@
+@import "../styles/variables.scss";
+
 .canvasContainer {
   width: 100%;
   position: absolute;
@@ -9,9 +11,9 @@
     display: block;
   }
   .shareButton {
+    @include primaryButton;
     position: fixed;
     width: 10em;
-    height: 3em;
     bottom: 1em;
     left: 50%;
     transform: translateX(-50%);
@@ -20,9 +22,9 @@
     }
   }
   .downloadButton {
+    @include secondaryButton;
     position: fixed;
     width: 3em;
-    height: 3em;
     bottom: 1em;
     right: 2em;
   }

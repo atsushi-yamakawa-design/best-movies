@@ -11,7 +11,8 @@ import {
   faArrowRight,
   faXmark,
   faCircleDown,
-  faCircleUp
+  faCircleUp,
+  faList
 } from "@fortawesome/free-solid-svg-icons";
 
 interface Movie {
@@ -164,22 +165,11 @@ export default function MoviePage() {
   // シェア用背景画像
   const backgroundUrl = "test/merge-images/best-movie-bg.png";
 
-  ////////////////////////ダミーデータ
-
-  // 映画の画像URLの配列
-  // const movieImageUrls = [
-  //   "test/merge-images/mov1.jpeg",
-  //   "test/merge-images/mov2.jpeg",
-  //   "test/merge-images/mov3.jpeg"
-  // ];
-
-  ////////////////////////ダミーデータここまで
-
   return (
     <>
       <main className={style.searchPage}>
         {showShareImage && (
-          <>
+          <div className={style.shareImagewrapper}>
             <ShareImage
               backgroundUrl={backgroundUrl}
               movieImageUrls={movieImageUrls}
@@ -189,7 +179,7 @@ export default function MoviePage() {
               <FontAwesomeIcon icon={faArrowLeft} className={style.icon} />
               編集
             </button>
-          </>
+          </div>
         )}
         <h1>⭐️わたしの2023映画ベスト10⭐️</h1>
         {showSearchModule && ( // 検索モジュールの表示/非表示を制御
@@ -210,6 +200,7 @@ export default function MoviePage() {
                   onClick={handleShowSelectedList}
                   className={style.movieCountButton}>
                   {selectedMovies.length}件選択中
+                  <FontAwesomeIcon icon={faList} className={style.icon} />
                 </button>
               )}
             </div>
@@ -243,7 +234,7 @@ export default function MoviePage() {
                 ))}
               </ul>
             ) : (
-              <p className={style.emptyText}>検索結果は0件です</p>
+              search && <p className={style.emptyText}>検索結果は0件です</p>
             )}
           </div>
         )}
@@ -303,6 +294,9 @@ export default function MoviePage() {
                   className={style.generateButton}>
                   画像を生成
                   <FontAwesomeIcon icon={faArrowRight} className={style.icon} />
+                  {selectedMovies.length < 10 && (
+                    <span>※10件選択してください</span>
+                  )}
                 </button>
               </div>
             </div>

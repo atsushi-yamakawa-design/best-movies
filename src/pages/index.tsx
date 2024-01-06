@@ -24,7 +24,7 @@ export default function MoviePage() {
     if (search) {
       axios
         .get(
-          `https://api.themoviedb.org/3/search/movie?api_key=${
+          `/api/3/search/movie?api_key=${
             process.env.NEXT_PUBLIC_TMDB_API_KEY
           }&language=ja&region=JP&query=${encodeURIComponent(search)}`
         )

@@ -49,7 +49,20 @@ export default function MoviePage() {
           const moviesFromPeople = personResponse.data.results.flatMap(
             (person: Person) => person.known_for
           );
-          setMovies([...moviesFromTitle, ...moviesFromPeople]);
+
+          // 重複を排除する処理
+          const uniqueMoviesFromPeople: Movie[] = [];
+          moviesFromPeople.forEach((movie: Movie) => {
+            if (!uniqueMoviesFromPeople.some((m) => m.id === movie.id)) {
+              uniqueMoviesFromPeople.push(movie);
+            }
+          });
+
+          const finalMoviesList = [
+            ...moviesFromTitle,
+            ...uniqueMoviesFromPeople
+          ];
+          setMovies(finalMoviesList);
         })
         .catch((error) => console.error(error));
     }

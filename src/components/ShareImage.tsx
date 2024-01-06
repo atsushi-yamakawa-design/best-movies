@@ -32,6 +32,7 @@ const ShareImage = ({
           imagesToLoad.map((src) => {
             return new Promise<HTMLImageElement>((resolve) => {
               const img = new Image();
+              img.crossOrigin = "anonymous";
               img.onload = () => resolve(img);
               img.src = src;
             });

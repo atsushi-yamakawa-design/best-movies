@@ -9,17 +9,18 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 interface ImagePageProps {
-  backgroundUrl: string;
+  // backgroundUrl: string;
   movieImageUrls: string[];
   movieTitles: string[];
 }
 
 const ShareImage = ({
-  backgroundUrl,
+  // backgroundUrl,
   movieImageUrls,
   movieTitles
 }: ImagePageProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const backgroundUrl = "test/merge-images/best-movie-bg.png";
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -46,7 +47,7 @@ const ShareImage = ({
           })
         ).then((images) => {
           images.forEach((img, index) => {
-            // 画像の描画
+            // 3番目までの画像を描画
             const position = imagePositions[index];
             const ratio = img.naturalHeight / img.naturalWidth;
             const height =

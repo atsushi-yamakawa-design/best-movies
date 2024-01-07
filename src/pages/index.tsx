@@ -17,7 +17,8 @@ import {
 
 interface Movie {
   id: number;
-  title: string;
+  title?: string;
+  name?: string;
   poster_path?: string;
 }
 interface Person {
@@ -166,14 +167,18 @@ export default function MoviePage() {
   // 画像パスが存在するかどうかの確認
   const getImageUrl = (posterPath: String) => {
     return posterPath
-      ? `https://image.tmdb.org/t/p/w500/${posterPath}`
+      ? `https://image.tmdb.org/t/p/w200/${posterPath}`
       : "images/dummy.png"; // ダミー画像のパス
   };
 
   // 共有するボタンをクリックした際の処理
   const handleShareClick = () => {
-    // 選択中の映画のタイトルを設定
-    setSelectedMovieTitles(selectedMovies.map((movie) => movie.title));
+    // 選択中の映画のタイトルを設定（空のタイトルは「（タイトルなし）」で置き換える）
+    setSelectedMovieTitles(
+      selectedMovies.map(
+        (movie) => movie.title || movie.name || "（タイトルなし）"
+      )
+    );
 
     // 選択中の映画の画像URLを設定
     const urls = selectedMovies.map((movie) =>
@@ -194,16 +199,12 @@ export default function MoviePage() {
     setShowSearchModule(true);
   };
 
-  // シェア用背景画像
-  const backgroundUrl = "test/merge-images/best-movie-bg.png";
-
   return (
     <>
       <main className={style.searchPage}>
         {showShareImage && (
           <div className={style.shareImagewrapper}>
             <ShareImage
-              backgroundUrl={backgroundUrl}
               movieImageUrls={movieImageUrls}
               movieTitles={selectedMovieTitles}
             />
@@ -252,14 +253,19 @@ export default function MoviePage() {
                         : ""
                     }>
                     <div className={style.movieText}>
-                      <p className={style.movieTitle}>{movie.title}</p>
+                      <p className={style.movieTitle}>
+                        {" "}
+                        <p className={style.movieTitle}>
+                          {movie.title || movie.name || "（タイトルなし）"}
+                        </p>
+                      </p>
                       {selectedMovies.find((m) => m.id === movie.id) && (
                         <p className={style.selectedText}>選択中</p>
                       )}
                     </div>
                     <Image
                       src={getImageUrl(movie.poster_path || "")}
-                      alt={movie.title}
+                      alt={movie.title || movie.name || "（タイトルなし）"}
                       width={165}
                       height={247}
                       unoptimized
@@ -307,7 +313,9 @@ export default function MoviePage() {
                         />
                       </button>
                     </div>
-                    <p className={style.selectedTitle}>{movie.title}</p>
+                    <p className={style.selectedTitle}>
+                      {movie.title || movie.name || "（タイトルなし）"}
+                    </p>
                     <button
                       className={style.removeButton}
                       onClick={() => handleRemoveMovie(movie.id)}>

@@ -17,80 +17,163 @@ const ShareImage = ({ movieImageUrls, movieTitles }: ImagePageProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const backgroundUrl = "test/merge-images/best-movie-bg.png";
 
+  // useEffect(() => {
+  //   if (canvasRef.current) {
+  //     const canvas = canvasRef.current;
+  //     const ctx = canvas.getContext("2d");
+  //     const topThreeMovieImageUrls = movieImageUrls.slice(0, 3);
+  //     const imagesToLoad = [backgroundUrl, ...topThreeMovieImageUrls];
+  //     const imagePositions = [
+  //       { x: 0, y: 0 }, // 背景画像
+  //       { x: 220, y: 380 },
+  //       { x: 220, y: 690 },
+  //       { x: 220, y: 1000 }
+  //     ];
+
+  //     if (ctx) {
+  //       Promise.all(
+  //         imagesToLoad.map((src) => {
+  //           return new Promise<HTMLImageElement>((resolve) => {
+  //             const img = new Image();
+  //             img.crossOrigin = "anonymous"; //CORSエラー対策
+  //             img.onload = () => resolve(img);
+  //             img.src = src;
+  //           });
+  //         })
+  //       ).then((images) => {
+  //         images.forEach((img, index) => {
+  //           // 3番目までの画像を描画
+  //           const position = imagePositions[index];
+  //           const ratio = img.naturalHeight / img.naturalWidth;
+  //           const height =
+  //             index === 0
+  //               ? (img.naturalHeight / img.naturalWidth) * canvas.width
+  //               : 170 * ratio;
+  //           ctx.drawImage(
+  //             img,
+  //             position.x,
+  //             position.y,
+  //             index === 0 ? canvas.width : 190,
+  //             height
+  //           );
+  //         });
+
+  //         // 3番目までのテキストを描画
+  //         movieTitles.slice(0, 3).forEach((title, index) => {
+  //           ctx.fillStyle = "white";
+  //           ctx.font = "bold 60px Arial";
+  //           const position = imagePositions[index + 1];
+  //           const textX = position.x + 190 + 30;
+  //           const imageHeight =
+  //             170 *
+  //             (images[index + 1].naturalHeight /
+  //               images[index + 1].naturalWidth);
+  //           const textY = position.y + imageHeight / 2 - 20;
+  //           wrapText(ctx, title || "（タイトルなし）", textX, textY, 640, 70);
+  //         });
+
+  //         // 4番目以降のテキストを描画
+  //         let startY = 840 + 170 * 3;
+  //         movieTitles.slice(3).forEach((title, index) => {
+  //           const dynamicTitle = `${index + 4}. ${title || "（タイトルなし）"}`;
+  //           ctx.font = "bold 46px Arial";
+  //           const textX = 120;
+  //           let textY = startY;
+  //           const textHeight = wrapText(
+  //             ctx,
+  //             dynamicTitle,
+  //             textX,
+  //             textY,
+  //             960,
+  //             64
+  //           );
+  //           startY += textHeight + 24;
+  //         });
+  //       });
+  //     }
+  //   }
+  // }, [backgroundUrl, movieImageUrls, movieTitles]);
   useEffect(() => {
     if (canvasRef.current) {
       const canvas = canvasRef.current;
       const ctx = canvas.getContext("2d");
+
+      if (!ctx) {
+        return; // ctxがnullの場合は、処理を中止
+      }
+
+      // スケーリング係数の計算
+      const scaleX = canvas.width / 1179;
+      const scaleY = canvas.height / 2229;
+
       const topThreeMovieImageUrls = movieImageUrls.slice(0, 3);
       const imagesToLoad = [backgroundUrl, ...topThreeMovieImageUrls];
+
+      // 画像とテキストの位置をスケーリング
       const imagePositions = [
-        { x: 0, y: 0 }, // 背景画像
-        { x: 220, y: 380 },
-        { x: 220, y: 690 },
-        { x: 220, y: 1000 }
+        { x: 0 * scaleX, y: 0 * scaleY },
+        { x: 220 * scaleX, y: 380 * scaleY },
+        { x: 220 * scaleX, y: 690 * scaleY },
+        { x: 220 * scaleX, y: 1000 * scaleY }
       ];
 
-      if (ctx) {
-        Promise.all(
-          imagesToLoad.map((src) => {
-            return new Promise<HTMLImageElement>((resolve) => {
-              const img = new Image();
-              img.crossOrigin = "anonymous"; //CORSエラー対策
-              img.onload = () => resolve(img);
-              img.src = src;
-            });
-          })
-        ).then((images) => {
-          images.forEach((img, index) => {
-            // 3番目までの画像を描画
-            const position = imagePositions[index];
-            const ratio = img.naturalHeight / img.naturalWidth;
-            const height =
-              index === 0
-                ? (img.naturalHeight / img.naturalWidth) * canvas.width
-                : 170 * ratio;
-            ctx.drawImage(
-              img,
-              position.x,
-              position.y,
-              index === 0 ? canvas.width : 190,
-              height
-            );
+      // 画像のロードと描画処理
+      Promise.all(
+        imagesToLoad.map((src) => {
+          return new Promise<HTMLImageElement>((resolve) => {
+            const img = new Image();
+            img.onload = () => resolve(img);
+            img.src = src;
           });
-
-          // 3番目までのテキストを描画
-          movieTitles.slice(0, 3).forEach((title, index) => {
-            ctx.fillStyle = "white";
-            ctx.font = "bold 60px Arial";
-            const position = imagePositions[index + 1];
-            const textX = position.x + 190 + 30;
-            const imageHeight =
-              170 *
-              (images[index + 1].naturalHeight /
-                images[index + 1].naturalWidth);
-            const textY = position.y + imageHeight / 2 - 20;
-            wrapText(ctx, title || "（タイトルなし）", textX, textY, 640, 70);
-          });
-
-          // 4番目以降のテキストを描画
-          let startY = 840 + 170 * 3;
-          movieTitles.slice(3).forEach((title, index) => {
-            const dynamicTitle = `${index + 4}. ${title || "（タイトルなし）"}`;
-            ctx.font = "bold 46px Arial";
-            const textX = 120;
-            let textY = startY;
-            const textHeight = wrapText(
-              ctx,
-              dynamicTitle,
-              textX,
-              textY,
-              960,
-              64
-            );
-            startY += textHeight + 24;
-          });
+        })
+      ).then((images) => {
+        images.forEach((img, index) => {
+          const position = imagePositions[index];
+          const width = index === 0 ? canvas.width : 190 * scaleX;
+          const height = (img.naturalHeight / img.naturalWidth) * width;
+          ctx.drawImage(img, position.x, position.y, width, height);
         });
-      }
+
+        // テキスト描画処理
+        // 3番目までのテキストを描画
+        movieTitles.slice(0, 3).forEach((title, index) => {
+          ctx.fillStyle = "white";
+          ctx.font = `bold ${60 * scaleX}px Arial`; // フォントサイズのスケーリング
+          const position = imagePositions[index + 1];
+          const textX = position.x + (190 + 30) * scaleX;
+          const imageHeight =
+            170 *
+            scaleY *
+            (images[index + 1].naturalHeight / images[index + 1].naturalWidth);
+          const textY = position.y + (imageHeight / 2 - 20) * scaleY;
+          wrapText(
+            ctx,
+            title || "（タイトルなし）",
+            textX,
+            textY,
+            640 * scaleX,
+            70 * scaleY
+          );
+        });
+
+        // 4番目以降のテキストを描画
+        let startY = (840 + 170 * 3) * scaleY;
+        movieTitles.slice(3).forEach((title, index) => {
+          const dynamicTitle = `${index + 4}. ${title || "（タイトルなし）"}`;
+          ctx.font = `bold ${46 * scaleX}px Arial`;
+          const textX = 120 * scaleX;
+          let textY = startY;
+          const textHeight = wrapText(
+            ctx,
+            dynamicTitle,
+            textX,
+            textY,
+            960 * scaleX,
+            64 * scaleY
+          );
+          startY += textHeight + 24 * scaleY;
+        });
+      });
     }
   }, [backgroundUrl, movieImageUrls, movieTitles]);
 
@@ -202,7 +285,7 @@ const ShareImage = ({ movieImageUrls, movieTitles }: ImagePageProps) => {
 
   return (
     <div className={style.canvasContainer}>
-      <canvas ref={canvasRef} width="1179" height="2229" />
+      <canvas ref={canvasRef} width="589" height="1114" />
       <button onClick={shareCanvas} className={style.shareButton}>
         共有する
         <FontAwesomeIcon icon={faArrowUpFromBracket} className={style.icon} />

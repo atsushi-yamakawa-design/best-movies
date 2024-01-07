@@ -20,6 +20,7 @@ main {
 button {
   border: none;
   color: $text-color-primary;
+  font-weight: 700;
 }
 button:disabled {
   cursor: not-allowed;

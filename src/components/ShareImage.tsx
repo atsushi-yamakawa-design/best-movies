@@ -9,16 +9,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 interface ImagePageProps {
-  // backgroundUrl: string;
   movieImageUrls: string[];
   movieTitles: string[];
 }
 
-const ShareImage = ({
-  // backgroundUrl,
-  movieImageUrls,
-  movieTitles
-}: ImagePageProps) => {
+const ShareImage = ({ movieImageUrls, movieTitles }: ImagePageProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const backgroundUrl = "test/merge-images/best-movie-bg.png";
 
@@ -133,6 +128,7 @@ const ShareImage = ({
     if (navigator.share && canvasRef.current) {
       const canvas = canvasRef.current;
       const shareText = createShareText(movieTitles);
+
       canvas.toBlob((blob) => {
         if (blob) {
           const file = new File([blob], "image.png", { type: "image/png" });

@@ -286,18 +286,8 @@ const ShareImage = ({ movieImageUrls, movieTitles }: ImagePageProps) => {
 
   return (
     <div className={style.canvasContainer}>
-      <canvas ref={canvasRef} width="589" height="1114" />
-      {/* movieImageUrlsとmovieTitlesをリスト形式で表示 */}
-      <ul>
-        {movieImageUrls.map((url, index) => (
-          <li key={index}>{url}</li>
-        ))}
-      </ul>
-      <ul>
-        {movieTitles.map((title, index) => (
-          <li key={index}>{title}</li>
-        ))}
-      </ul>
+      <canvas ref={canvasRef} width="393" height="743" />
+
       <button onClick={shareCanvas} className={style.shareButton}>
         共有する
         <FontAwesomeIcon icon={faArrowUpFromBracket} className={style.icon} />

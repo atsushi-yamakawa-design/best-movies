@@ -15,6 +15,37 @@ import {
   faList
 } from "@fortawesome/free-solid-svg-icons";
 
+interface MultiSearchResponse {
+  results: MultiSearchResult[];
+}
+interface MultiSearchResult {
+  adult: boolean;
+  backdrop_path?: string;
+  id: number;
+  title?: string;
+  name?: string;
+  original_language: string;
+  original_title?: string;
+  original_name?: string;
+  overview: string;
+  poster_path?: string;
+  media_type: string;
+  genre_ids: number[];
+  popularity: number;
+  release_date?: string;
+  first_air_date?: string;
+  video?: boolean;
+  vote_average: number;
+  vote_count: number;
+  origin_country?: string[];
+  results: MultiSearchResult[];
+  // Personに関連する追加フィールド
+  gender?: number;
+  known_for_department?: string;
+  profile_path?: string;
+  known_for?: MultiSearchResult[]; // 再帰的に同じ型を使用
+}
+
 interface Movie {
   id: number;
   title?: string;
@@ -35,61 +66,122 @@ export default function MoviePage() {
   const [showSearchModule, setShowSearchModule] = useState(true);
   const [movieImageUrls, setMovieImageUrls] = useState<string[]>([]); // 映画の画像URLの配列の状態
 
+  // useEffect(() => {
+  //   if (search) {
+  //     const multiSearchURL = `/api/3/search/multi?api_key=${
+  //       process.env.NEXT_PUBLIC_TMDB_API_KEY
+  //     }&language=ja&query=${encodeURIComponent(search)}`;
+
+  //     // その後、axiosの応答データの型を指定
+  //     axios
+  //       .get<MultiSearchResponse>(multiSearchURL)
+  //       .then((response) => {
+  //         const results = response.data.results;
+  //         const filteredMoviesAndTVShows = results.filter(
+  //           (item) => item.media_type === "movie" || item.media_type === "tv"
+  //         );
+  //         setMovies(filteredMoviesAndTVShows);
+  //       })
+  //       .catch((error) => console.error(error));
+
+  //     // const searchKatakana = toKatakana(search); // ひらがなをカタカナに変換
+  //     // const movieSearchURLHiragana = `/api/3/search/movie?api_key=${
+  //     //   process.env.NEXT_PUBLIC_TMDB_API_KEY
+  //     // }&language=ja&region=JP&query=${encodeURIComponent(search)}`;
+  //     // const movieSearchURLKatakana = `/api/3/search/movie?api_key=${
+  //     //   process.env.NEXT_PUBLIC_TMDB_API_KEY
+  //     // }&language=ja&region=JP&query=${encodeURIComponent(searchKatakana)}`;
+
+  //     // const personSearchURLHiragana = `/api/3/search/person?api_key=${
+  //     //   process.env.NEXT_PUBLIC_TMDB_API_KEY
+  //     // }&language=ja&region=JP&query=${encodeURIComponent(search)}`;
+  //     // const personSearchURLKatakana = `/api/3/search/person?api_key=${
+  //     //   process.env.NEXT_PUBLIC_TMDB_API_KEY
+  //     // }&language=ja&region=JP&query=${encodeURIComponent(searchKatakana)}`;
+
+  //     // Promise.all([
+  //     //   axios.get(movieSearchURLHiragana),
+  //     //   axios.get(movieSearchURLKatakana),
+  //     //   axios.get(personSearchURLHiragana),
+  //     //   axios.get(personSearchURLKatakana)
+  //     // ])
+  //     //   .then(
+  //     //     ([
+  //     //       movieResponseHiragana,
+  //     //       movieResponseKatakana,
+  //     //       personResponseHiragana,
+  //     //       personResponseKatakana
+  //     //     ]) => {
+  //     //       const moviesFromTitleHiragana = movieResponseHiragana.data.results;
+  //     //       const moviesFromTitleKatakana = movieResponseKatakana.data.results;
+  //     //       const moviesFromPeopleHiragana =
+  //     //         personResponseHiragana.data.results.flatMap(
+  //     //           (person: Person) => person.known_for
+  //     //         );
+  //     //       const moviesFromPeopleKatakana =
+  //     //         personResponseKatakana.data.results.flatMap(
+  //     //           (person: Person) => person.known_for
+  //     //         );
+
+  //     //       // 重複を排除する処理
+  //     //       const allMovies = [
+  //     //         ...moviesFromTitleHiragana,
+  //     //         ...moviesFromTitleKatakana,
+  //     //         ...moviesFromPeopleHiragana,
+  //     //         ...moviesFromPeopleKatakana
+  //     //       ];
+  //     //       const uniqueMovies = Array.from(
+  //     //         new Set(allMovies.map((m) => m.id))
+  //     //       ).map((id) => allMovies.find((m) => m.id === id));
+
+  //     //       setMovies(uniqueMovies);
+  //     //     }
+
+  //     //   )
+  //     //   .catch((error) => console.error(error));
+  //   }
+  // }, [search]);
+
   useEffect(() => {
     if (search) {
-      const searchKatakana = toKatakana(search); // ひらがなをカタカナに変換
-      const movieSearchURLHiragana = `/api/3/search/movie?api_key=${
+      const searchKatakana = toKatakana(search);
+      const multiSearchURLHiragana = `/api/3/search/multi?api_key=${
         process.env.NEXT_PUBLIC_TMDB_API_KEY
-      }&language=ja&region=JP&query=${encodeURIComponent(search)}`;
-      const movieSearchURLKatakana = `/api/3/search/movie?api_key=${
+      }&language=ja&query=${encodeURIComponent(search)}`;
+      const multiSearchURLKatakana = `/api/3/search/multi?api_key=${
         process.env.NEXT_PUBLIC_TMDB_API_KEY
-      }&language=ja&region=JP&query=${encodeURIComponent(searchKatakana)}`;
-
-      const personSearchURLHiragana = `/api/3/search/person?api_key=${
-        process.env.NEXT_PUBLIC_TMDB_API_KEY
-      }&language=ja&region=JP&query=${encodeURIComponent(search)}`;
-      const personSearchURLKatakana = `/api/3/search/person?api_key=${
-        process.env.NEXT_PUBLIC_TMDB_API_KEY
-      }&language=ja&region=JP&query=${encodeURIComponent(searchKatakana)}`;
+      }&language=ja&query=${encodeURIComponent(searchKatakana)}`;
 
       Promise.all([
-        axios.get(movieSearchURLHiragana),
-        axios.get(movieSearchURLKatakana),
-        axios.get(personSearchURLHiragana),
-        axios.get(personSearchURLKatakana)
+        axios.get<MultiSearchResponse>(multiSearchURLHiragana),
+        axios.get<MultiSearchResponse>(multiSearchURLKatakana)
       ])
-        .then(
-          ([
-            movieResponseHiragana,
-            movieResponseKatakana,
-            personResponseHiragana,
-            personResponseKatakana
-          ]) => {
-            const moviesFromTitleHiragana = movieResponseHiragana.data.results;
-            const moviesFromTitleKatakana = movieResponseKatakana.data.results;
-            const moviesFromPeopleHiragana =
-              personResponseHiragana.data.results.flatMap(
-                (person: Person) => person.known_for
-              );
-            const moviesFromPeopleKatakana =
-              personResponseKatakana.data.results.flatMap(
-                (person: Person) => person.known_for
-              );
+        .then(([responseHiragana, responseKatakana]) => {
+          const resultsHiragana = responseHiragana.data.results;
+          const resultsKatakana = responseKatakana.data.results;
 
-            // 重複を排除する処理
-            const allMovies = [
-              ...moviesFromTitleHiragana,
-              ...moviesFromTitleKatakana,
-              ...moviesFromPeopleHiragana,
-              ...moviesFromPeopleKatakana
-            ];
-            const uniqueMovies = Array.from(
-              new Set(allMovies.map((m) => m.id))
-            ).map((id) => allMovies.find((m) => m.id === id));
+          const combinedResults = [...resultsHiragana, ...resultsKatakana];
+          const uniqueResults = Array.from(
+            new Set(combinedResults.map((item) => item.id))
+          )
+            .map((id) => combinedResults.find((item) => item.id === id))
+            .filter((item) => item !== undefined) as MultiSearchResult[]; // undefinedをフィルタリング
 
-            setMovies(uniqueMovies);
-          }
-        )
+          // 映画やTVシリーズに加えて、人物に関連する作品も抽出
+          const relatedMoviesAndTVShows = uniqueResults.flatMap((item) => {
+            if (item.media_type === "movie" || item.media_type === "tv") {
+              return [item];
+            } else if (item.media_type === "person" && item.known_for) {
+              return item.known_for.filter(
+                (kf) => kf.media_type === "movie" || kf.media_type === "tv"
+              );
+            } else {
+              return [];
+            }
+          });
+
+          setMovies(relatedMoviesAndTVShows);
+        })
         .catch((error) => console.error(error));
     }
   }, [search]);

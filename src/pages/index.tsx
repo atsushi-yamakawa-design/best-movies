@@ -52,9 +52,6 @@ interface Movie {
   name?: string;
   poster_path?: string;
 }
-interface Person {
-  known_for: Movie[];
-}
 
 export default function MoviePage() {
   const [search, setSearch] = useState("");

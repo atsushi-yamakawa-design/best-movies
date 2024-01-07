@@ -133,52 +133,52 @@ const ShareImage = ({
     if (navigator.share && canvasRef.current) {
       const canvas = canvasRef.current;
       const shareText = createShareText(movieTitles);
-      //   canvas.toBlob((blob) => {
-      //     if (blob) {
-      //       const file = new File([blob], "image.png", { type: "image/png" });
-      //       navigator
-      //         .share({
-      //           files: [file],
-      //           title: "My Best Movies 2023 ",
-      //           text: shareText
-      //         })
-      //         .then(() => {
-      //           console.log("共有が開始されました"); // 共有が開始されたことを示すアラート
-      //         })
-      //         .catch((error) => {
-      //           console.error("Error sharing the image", error);
-      //         });
-      //     } else {
-      //       alert("Blobがnullです");
-      //       console.error("Failed to convert the canvas to a blob");
-      //     }
-      //   }, "image/png");
-      // } else {
-      //   alert("モバイルデバイスのみ対応しています");
-      //   console.log(
-      //     "Web Share API is not supported in your browser, or canvas is null."
-      //   );
-
-      const dataUrl = canvas.toDataURL("image/png");
-
-      // Data URLからBlobオブジェクトを作成するために必要な処理
-      fetch(dataUrl)
-        .then((res) => res.blob())
-        .then((blob) => {
+      canvas.toBlob((blob) => {
+        if (blob) {
           const file = new File([blob], "image.png", { type: "image/png" });
           navigator
             .share({
               files: [file],
-              title: "My Best Movies 2023",
+              title: "My Best Movies 2023 ",
               text: shareText
             })
             .then(() => {
-              console.log("共有が開始されました");
+              console.log("共有が開始されました"); // 共有が開始されたことを示すアラート
             })
             .catch((error) => {
               console.error("Error sharing the image", error);
             });
-        });
+        } else {
+          alert("Blobがnullです");
+          console.error("Failed to convert the canvas to a blob");
+        }
+      }, "image/png");
+    } else {
+      alert("モバイルデバイスのみ対応しています");
+      console.log(
+        "Web Share API is not supported in your browser, or canvas is null."
+      );
+
+      // const dataUrl = canvas.toDataURL("image/png");
+
+      // // Data URLからBlobオブジェクトを作成するために必要な処理
+      // fetch(dataUrl)
+      //   .then((res) => res.blob())
+      //   .then((blob) => {
+      //     const file = new File([blob], "image.png", { type: "image/png" });
+      //     navigator
+      //       .share({
+      //         files: [file],
+      //         title: "My Best Movies 2023",
+      //         text: shareText
+      //       })
+      //       .then(() => {
+      //         console.log("共有が開始されました");
+      //       })
+      //       .catch((error) => {
+      //         console.error("Error sharing the image", error);
+      //       });
+      //   });
     }
   };
 

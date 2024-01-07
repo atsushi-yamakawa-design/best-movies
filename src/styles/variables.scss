@@ -28,11 +28,14 @@ $button-bg-secondary: $color-gray-very-pale;
 $button-text-primary: $color-light;
 $button-text-secondary: $color-light;
 
+$button-shadow: 0 2px 4px #00000033;
+
 @mixin primaryButton {
   color: $text-color-primary;
   background-color: $button-bg-primary;
   height: 3em;
   border-radius: 1.5em;
+  box-shadow: $button-shadow;
   &:disabled {
     opacity: 0.6;
     cursor: not-allowed;
@@ -44,6 +47,7 @@ $button-text-secondary: $color-light;
   background-color: $button-bg-secondary;
   height: 3em;
   border-radius: 1.5em;
+  box-shadow: $button-shadow;
 }
 
 @mixin textButton {

@@ -19,6 +19,7 @@ main {
 
 button {
   border: none;
+  color: $text-color-primary;
 }
 button:disabled {
   cursor: not-allowed;

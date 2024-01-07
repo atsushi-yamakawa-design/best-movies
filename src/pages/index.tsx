@@ -225,7 +225,11 @@ export default function MoviePage() {
                   placeholder="タイトルを入力"
                   className={style.textInput}
                 />
-                {search && <button onClick={clearSearch}>×</button>}
+                {search && (
+                  <button onClick={clearSearch}>
+                    <FontAwesomeIcon icon={faXmark} className={style.icon} />
+                  </button>
+                )}
               </div>
               {selectedMovies.length > 0 && (
                 <button

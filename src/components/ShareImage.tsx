@@ -5,8 +5,7 @@ import style from "./ShareImage.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowUpFromBracket,
-  faCircle,
-  faCircleDown
+  faCloudArrowDown
 } from "@fortawesome/free-solid-svg-icons";
 
 interface ImagePageProps {
@@ -133,31 +132,52 @@ const ShareImage = ({
     if (navigator.share && canvasRef.current) {
       const canvas = canvasRef.current;
       const shareText = createShareText(movieTitles);
-      canvas.toBlob((blob) => {
-        if (blob) {
+      //   canvas.toBlob((blob) => {
+      //     if (blob) {
+      //       const file = new File([blob], "image.png", { type: "image/png" });
+      //       navigator
+      //         .share({
+      //           files: [file],
+      //           title: "My Best Movies 2023 ",
+      //           text: shareText
+      //         })
+      //         .then(() => {
+      //           console.log("共有が開始されました"); // 共有が開始されたことを示すアラート
+      //         })
+      //         .catch((error) => {
+      //           console.error("Error sharing the image", error);
+      //         });
+      //     } else {
+      //       alert("Blobがnullです");
+      //       console.error("Failed to convert the canvas to a blob");
+      //     }
+      //   }, "image/png");
+      // } else {
+      //   alert("モバイルデバイスのみ対応しています");
+      //   console.log(
+      //     "Web Share API is not supported in your browser, or canvas is null."
+      //   );
+
+      const dataUrl = canvas.toDataURL("image/png");
+
+      // Data URLからBlobオブジェクトを作成するために必要な処理
+      fetch(dataUrl)
+        .then((res) => res.blob())
+        .then((blob) => {
           const file = new File([blob], "image.png", { type: "image/png" });
           navigator
             .share({
               files: [file],
-              title: "My Best Movies 2023 ",
+              title: "My Best Movies 2023",
               text: shareText
             })
             .then(() => {
-              console.log("共有が開始されました"); // 共有が開始されたことを示すアラート
+              console.log("共有が開始されました");
             })
             .catch((error) => {
               console.error("Error sharing the image", error);
             });
-        } else {
-          alert("Blobがnullです");
-          console.error("Failed to convert the canvas to a blob");
-        }
-      }, "image/png");
-    } else {
-      alert("モバイルデバイスのみ対応しています");
-      console.log(
-        "Web Share API is not supported in your browser, or canvas is null."
-      );
+        });
     }
   };
 
@@ -191,7 +211,7 @@ const ShareImage = ({
         <FontAwesomeIcon icon={faArrowUpFromBracket} className={style.icon} />
       </button>
       <button onClick={downloadCanvas} className={style.downloadButton}>
-        <FontAwesomeIcon icon={faCircleDown} className={style.icon} />
+        <FontAwesomeIcon icon={faCloudArrowDown} className={style.icon} />
       </button>
     </div>
   );

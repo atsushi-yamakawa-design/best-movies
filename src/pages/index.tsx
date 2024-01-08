@@ -226,7 +226,7 @@ export default function MoviePage() {
             </button>
           </div>
         )}
-        <h1>⭐️わたしの2023映画ベスト10⭐️</h1>
+        <h1>⭐️🎞️わたしの2023映画ベスト10🍿⭐️</h1>
         {showSearchModule && ( // 検索モジュールの表示/非表示を制御
           <div className={style.searchModule}>
             <div className={style.textInputWrapper}>

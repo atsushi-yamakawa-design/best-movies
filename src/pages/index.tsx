@@ -83,18 +83,22 @@ export default function MoviePage() {
           const resultsKatakana = responseKatakana.data.results;
 
           const combinedResults = [...resultsHiragana, ...resultsKatakana];
-          const uniqueResults = Array.from(
-            new Set(combinedResults.map((item) => item.id))
-          )
-            .map((id) => combinedResults.find((item) => item.id === id))
-            .filter((item) => item !== undefined) as MultiSearchResult[]; // undefinedをフィルタリング
 
-          // 映画やTVシリーズに加えて、人物に関連する作品も抽出
-          const relatedMoviesAndTVShows = uniqueResults.flatMap((item) => {
+          // IDに基づいて重複を除去
+          const uniqueResults = [
+            ...new Map(combinedResults.map((item) => [item.id, item])).values()
+          ];
+
+          // 映画やTVシリーズ、そして人物に関連する作品を抽出
+          const allRelatedItems = uniqueResults.flatMap((item) => {
             if (item.media_type === "movie" || item.media_type === "tv") {
               return [item];
             } else if (item.media_type === "person" && item.known_for) {
-              return item.known_for.filter(
+              // 人物に関連する作品も重複を考慮して抽出
+              const knownForUnique = [
+                ...new Map(item.known_for.map((kf) => [kf.id, kf])).values()
+              ];
+              return knownForUnique.filter(
                 (kf) => kf.media_type === "movie" || kf.media_type === "tv"
               );
             } else {
@@ -102,13 +106,18 @@ export default function MoviePage() {
             }
           });
 
-          setMovies(relatedMoviesAndTVShows);
+          // 最終的なデータセット全体に対して重複除去
+          const finalUniqueResults = [
+            ...new Map(allRelatedItems.map((item) => [item.id, item])).values()
+          ];
+
+          setMovies(finalUniqueResults);
         })
         .catch((error) => console.error(error));
     }
   }, [search]);
 
-  //ひらがな→カタカナ変換用関数s
+  // ひらがな→カタカナ変換用関数
   function toKatakana(str: String) {
     return str.replace(/[\u3041-\u3096]/g, function (match) {
       var char = match.charCodeAt(0) + 0x60;

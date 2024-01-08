@@ -45,7 +45,7 @@ const ShareImage = ({ movieImageUrls, movieTitles }: ImagePageProps) => {
         { x: 220 * scaleX, y: 1000 * scaleY }
       ];
 
-      console.log(topThreeMovieImageUrls);
+      const startTime = Date.now();
 
       // 画像のロードと描画処理
       Promise.all(
@@ -111,17 +111,20 @@ const ShareImage = ({ movieImageUrls, movieTitles }: ImagePageProps) => {
               });
             }
           });
+          // 最低2秒間のローディング時間を確保;
+          const elapsedTime = Date.now() - startTime;
+          if (elapsedTime < 1500) {
+            setTimeout(() => {
+              setLoading(false);
+            }, 1500 - elapsedTime);
+          } else {
+            setLoading(false);
+          }
         })
         .catch((error) => {
           // 画像のロードエラーが発生した場合の処理
           console.error(error);
           alert("画像ロードエラー");
-          setLoading(false);
-        })
-        .finally(() => {
-          // setTimeout(() => {
-          //   setLoading(false); // ローディング完了
-          // }, 2000); // 2秒後にローディングを解除
           setLoading(false);
         });
     }
@@ -212,25 +215,33 @@ const ShareImage = ({ movieImageUrls, movieTitles }: ImagePageProps) => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className={style.canvasContainer}>
-        <canvas ref={canvasRef} width="1179" height="2229" />
-        <p>ローディング中...</p>
-      </div>
-    );
-  }
-
   return (
     <div className={style.canvasContainer}>
-      <canvas ref={canvasRef} width="1179" height="2229" />
-      <button onClick={shareCanvas} className={style.shareButton}>
-        共有する
-        <FontAwesomeIcon icon={faArrowUpFromBracket} className={style.icon} />
-      </button>
-      <button onClick={downloadCanvas} className={style.downloadButton}>
-        <FontAwesomeIcon icon={faCloudArrowDown} className={style.icon} />
-      </button>
+      {loading && (
+        <div className={style.loadingScreen}>
+          <p>作成中...</p>
+        </div>
+      )}
+      <canvas
+        ref={canvasRef}
+        width="1179"
+        height="2229"
+        style={{ display: loading ? "none" : "block" }}
+      />
+      {!loading && (
+        <>
+          <button onClick={shareCanvas} className={style.shareButton}>
+            共有する
+            <FontAwesomeIcon
+              icon={faArrowUpFromBracket}
+              className={style.icon}
+            />
+          </button>
+          <button onClick={downloadCanvas} className={style.downloadButton}>
+            <FontAwesomeIcon icon={faCloudArrowDown} className={style.icon} />
+          </button>
+        </>
+      )}
     </div>
   );
 };

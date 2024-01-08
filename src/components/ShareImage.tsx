@@ -27,11 +27,8 @@ const ShareImage = ({ movieImageUrls, movieTitles }: ImagePageProps) => {
         return; // ctxがnullの場合は、処理を中止
       }
 
-      // canvas.width = 1179;
-      // canvas.height = 2229;
-
-      canvas.width = 24;
-      canvas.height = 48;
+      canvas.width = 1179;
+      canvas.height = 2229;
 
       // スケーリング係数の計算
       const scaleX = canvas.width / 1179;
@@ -47,6 +44,8 @@ const ShareImage = ({ movieImageUrls, movieTitles }: ImagePageProps) => {
         { x: 220 * scaleX, y: 690 * scaleY },
         { x: 220 * scaleX, y: 1000 * scaleY }
       ];
+
+      console.log(topThreeMovieImageUrls);
 
       // 画像のロードと描画処理
       Promise.all(

@@ -142,10 +142,10 @@ export default function MoviePage() {
   useEffect(() => {
     if (search) {
       const searchKatakana = toKatakana(search);
-      const multiSearchURLHiragana = `/api/3/search/multi?api_key=${
+      const multiSearchURLHiragana = `https://api.themoviedb.org/3/search/multi?api_key=${
         process.env.NEXT_PUBLIC_TMDB_API_KEY
       }&language=ja&query=${encodeURIComponent(search)}`;
-      const multiSearchURLKatakana = `/api/3/search/multi?api_key=${
+      const multiSearchURLKatakana = `https://api.themoviedb.org/3/search/multi?api_key=${
         process.env.NEXT_PUBLIC_TMDB_API_KEY
       }&language=ja&query=${encodeURIComponent(searchKatakana)}`;
 

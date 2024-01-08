@@ -275,6 +275,9 @@
           margin-left: 0.3em;
         }
       }
+      .textRed {
+        color: $color-danger;
+      }
     }
     .movieList {
       margin-top: 4em;
@@ -404,6 +407,12 @@
           .removeButton {
             font-size: 1.2em;
             background: none;
+          }
+        }
+        .notRanked {
+          background-color: $color-gray-very-pale;
+          .selectedTitle {
+            opacity: 0.5;
           }
         }
       }

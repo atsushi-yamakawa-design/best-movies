@@ -63,82 +63,7 @@ export default function MoviePage() {
   const [showSearchModule, setShowSearchModule] = useState(true);
   const [movieImageUrls, setMovieImageUrls] = useState<string[]>([]); // 映画の画像URLの配列の状態
 
-  // useEffect(() => {
-  //   if (search) {
-  //     const multiSearchURL = `/api/3/search/multi?api_key=${
-  //       process.env.NEXT_PUBLIC_TMDB_API_KEY
-  //     }&language=ja&query=${encodeURIComponent(search)}`;
-
-  //     // その後、axiosの応答データの型を指定
-  //     axios
-  //       .get<MultiSearchResponse>(multiSearchURL)
-  //       .then((response) => {
-  //         const results = response.data.results;
-  //         const filteredMoviesAndTVShows = results.filter(
-  //           (item) => item.media_type === "movie" || item.media_type === "tv"
-  //         );
-  //         setMovies(filteredMoviesAndTVShows);
-  //       })
-  //       .catch((error) => console.error(error));
-
-  //     // const searchKatakana = toKatakana(search); // ひらがなをカタカナに変換
-  //     // const movieSearchURLHiragana = `/api/3/search/movie?api_key=${
-  //     //   process.env.NEXT_PUBLIC_TMDB_API_KEY
-  //     // }&language=ja&region=JP&query=${encodeURIComponent(search)}`;
-  //     // const movieSearchURLKatakana = `/api/3/search/movie?api_key=${
-  //     //   process.env.NEXT_PUBLIC_TMDB_API_KEY
-  //     // }&language=ja&region=JP&query=${encodeURIComponent(searchKatakana)}`;
-
-  //     // const personSearchURLHiragana = `/api/3/search/person?api_key=${
-  //     //   process.env.NEXT_PUBLIC_TMDB_API_KEY
-  //     // }&language=ja&region=JP&query=${encodeURIComponent(search)}`;
-  //     // const personSearchURLKatakana = `/api/3/search/person?api_key=${
-  //     //   process.env.NEXT_PUBLIC_TMDB_API_KEY
-  //     // }&language=ja&region=JP&query=${encodeURIComponent(searchKatakana)}`;
-
-  //     // Promise.all([
-  //     //   axios.get(movieSearchURLHiragana),
-  //     //   axios.get(movieSearchURLKatakana),
-  //     //   axios.get(personSearchURLHiragana),
-  //     //   axios.get(personSearchURLKatakana)
-  //     // ])
-  //     //   .then(
-  //     //     ([
-  //     //       movieResponseHiragana,
-  //     //       movieResponseKatakana,
-  //     //       personResponseHiragana,
-  //     //       personResponseKatakana
-  //     //     ]) => {
-  //     //       const moviesFromTitleHiragana = movieResponseHiragana.data.results;
-  //     //       const moviesFromTitleKatakana = movieResponseKatakana.data.results;
-  //     //       const moviesFromPeopleHiragana =
-  //     //         personResponseHiragana.data.results.flatMap(
-  //     //           (person: Person) => person.known_for
-  //     //         );
-  //     //       const moviesFromPeopleKatakana =
-  //     //         personResponseKatakana.data.results.flatMap(
-  //     //           (person: Person) => person.known_for
-  //     //         );
-
-  //     //       // 重複を排除する処理
-  //     //       const allMovies = [
-  //     //         ...moviesFromTitleHiragana,
-  //     //         ...moviesFromTitleKatakana,
-  //     //         ...moviesFromPeopleHiragana,
-  //     //         ...moviesFromPeopleKatakana
-  //     //       ];
-  //     //       const uniqueMovies = Array.from(
-  //     //         new Set(allMovies.map((m) => m.id))
-  //     //       ).map((id) => allMovies.find((m) => m.id === id));
-
-  //     //       setMovies(uniqueMovies);
-  //     //     }
-
-  //     //   )
-  //     //   .catch((error) => console.error(error));
-  //   }
-  // }, [search]);
-
+  // 検索ロジック
   useEffect(() => {
     if (search) {
       const searchKatakana = toKatakana(search);
@@ -183,7 +108,7 @@ export default function MoviePage() {
     }
   }, [search]);
 
-  //ひらがな→カタカナ検索ロジック
+  //ひらがな→カタカナ変換用関数s
   function toKatakana(str: String) {
     return str.replace(/[\u3041-\u3096]/g, function (match) {
       var char = match.charCodeAt(0) + 0x60;
@@ -200,8 +125,8 @@ export default function MoviePage() {
     if (selectedMovies.find((m) => m.id === movie.id)) {
       setSelectedMovies(selectedMovies.filter((m) => m.id !== movie.id));
     } else {
-      if (selectedMovies.length >= 10) {
-        alert("選択できるのは10件までです");
+      if (selectedMovies.length >= 15) {
+        alert("選択できるのは15件までです");
       } else {
         setSelectedMovies([...selectedMovies, movie]);
       }
@@ -262,15 +187,15 @@ export default function MoviePage() {
   const handleShareClick = () => {
     // 選択中の映画のタイトルを設定（空のタイトルは「（タイトルなし）」で置き換える）
     setSelectedMovieTitles(
-      selectedMovies.map(
-        (movie) => movie.title || movie.name || "（タイトルなし）"
-      )
+      selectedMovies
+        .slice(0, 10)
+        .map((movie) => movie.title || movie.name || "（タイトルなし）")
     );
 
-    // 選択中の映画の画像URLを設定
-    const urls = selectedMovies.map((movie) =>
-      getImageUrl(movie.poster_path || "")
-    );
+    // 選択中の映画の画像URLを設定（上位10件のみ）
+    const urls = selectedMovies
+      .slice(0, 10)
+      .map((movie) => getImageUrl(movie.poster_path || ""));
 
     setMovieImageUrls(urls);
 
@@ -322,7 +247,9 @@ export default function MoviePage() {
               {selectedMovies.length > 0 && (
                 <button
                   onClick={handleShowSelectedList}
-                  className={style.movieCountButton}>
+                  className={`${style.movieCountButton} ${
+                    selectedMovies.length >= 11 ? style.textRed : ""
+                  }`}>
                   {selectedMovies.length}件選択中
                   <FontAwesomeIcon icon={faList} className={style.icon} />
                 </button>
@@ -382,7 +309,9 @@ export default function MoviePage() {
               </div>
               <ul className={style.selectedList}>
                 {selectedMovies.map((movie, index) => (
-                  <li key={movie.id}>
+                  <li
+                    key={movie.id}
+                    className={index >= 10 ? style.notRanked : ""}>
                     <div className={style.sortButtons}>
                       <button onClick={() => moveMovie(movie.id, -1)}>
                         <FontAwesomeIcon
@@ -416,12 +345,12 @@ export default function MoviePage() {
                 </button>
                 <button
                   onClick={handleShareClick}
-                  disabled={selectedMovies.length !== 10}
+                  disabled={selectedMovies.length < 10}
                   className={style.generateButton}>
                   画像を生成
                   <FontAwesomeIcon icon={faArrowRight} className={style.icon} />
                   {selectedMovies.length < 10 && (
-                    <span>※10件選択してください</span>
+                    <span>※10件以上選択してください</span>
                   )}
                 </button>
               </div>

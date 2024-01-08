@@ -37,6 +37,13 @@
       margin-left: 0.3em;
     }
   }
+  .copyButton {
+    @include secondaryButton;
+    position: fixed;
+    width: 3em;
+    bottom: 1em;
+    right: 6em;
+  }
   .downloadButton {
     @include secondaryButton;
     position: fixed;

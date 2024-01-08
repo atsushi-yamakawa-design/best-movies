@@ -5,7 +5,8 @@ import style from "./ShareImage.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowUpFromBracket,
-  faCloudArrowDown
+  faCloudArrowDown,
+  faCopy
 } from "@fortawesome/free-solid-svg-icons";
 
 interface ImagePageProps {
@@ -193,6 +194,30 @@ const ShareImage = ({ movieImageUrls, movieTitles }: ImagePageProps) => {
     }
   };
 
+  const copyToClipboard = async () => {
+    if (!canvasRef.current) {
+      console.error("キャンバスが存在しません。");
+      return;
+    }
+
+    canvasRef.current.toBlob((blob) => {
+      if (!blob) {
+        console.error("キャンバスからBlobが生成できませんでした。");
+        return;
+      }
+
+      const item = new ClipboardItem({ "image/png": blob });
+      navigator.clipboard
+        .write([item])
+        .then(() => {
+          console.log("画像がクリップボードにコピーされました。");
+        })
+        .catch((err) => {
+          console.error("クリップボードへのコピーに失敗しました。", err);
+        });
+    }, "image/png");
+  };
+
   const downloadCanvas = () => {
     if (canvasRef.current) {
       const canvas = canvasRef.current;
@@ -236,6 +261,9 @@ const ShareImage = ({ movieImageUrls, movieTitles }: ImagePageProps) => {
               icon={faArrowUpFromBracket}
               className={style.icon}
             />
+          </button>
+          <button onClick={copyToClipboard} className={style.copyButton}>
+            <FontAwesomeIcon icon={faCopy} className={style.icon} />
           </button>
           <button onClick={downloadCanvas} className={style.downloadButton}>
             <FontAwesomeIcon icon={faCloudArrowDown} className={style.icon} />

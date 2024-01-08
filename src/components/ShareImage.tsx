@@ -53,7 +53,7 @@ const ShareImage = ({ movieImageUrls, movieTitles }: ImagePageProps) => {
           setLoading(true);
           return new Promise<HTMLImageElement>((resolve) => {
             const img = new Image();
-            // img.crossOrigin = "anonymous"; //CORSエラー対策
+            img.crossOrigin = "anonymous"; //CORSエラー対策
             img.onload = () => resolve(img);
             img.src = src;
           });

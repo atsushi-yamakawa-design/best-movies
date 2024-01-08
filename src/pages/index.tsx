@@ -142,10 +142,10 @@ export default function MoviePage() {
   useEffect(() => {
     if (search) {
       const searchKatakana = toKatakana(search);
-      const multiSearchURLHiragana = `https://api.themoviedb.org/3/search/multi?api_key=${
+      const multiSearchURLHiragana = `/api/3/search/multi?api_key=${
         process.env.NEXT_PUBLIC_TMDB_API_KEY
       }&language=ja&query=${encodeURIComponent(search)}`;
-      const multiSearchURLKatakana = `https://api.themoviedb.org/3/search/multi?api_key=${
+      const multiSearchURLKatakana = `/api/3/search/multi?api_key=${
         process.env.NEXT_PUBLIC_TMDB_API_KEY
       }&language=ja&query=${encodeURIComponent(searchKatakana)}`;
 
@@ -255,9 +255,7 @@ export default function MoviePage() {
 
   // 画像パスが存在するかどうかの確認
   const getImageUrl = (posterPath: String) => {
-    return posterPath
-      ? `https://image.tmdb.org/t/p/w200/${posterPath}`
-      : "images/dummy.png"; // ダミー画像のパス
+    return posterPath ? `poster/t/p/w200/${posterPath}` : "images/dummy.png"; // ダミー画像のパス
   };
 
   // 共有するボタンをクリックした際の処理

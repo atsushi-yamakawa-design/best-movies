@@ -343,10 +343,7 @@ export default function MoviePage() {
                     }>
                     <div className={style.movieText}>
                       <p className={style.movieTitle}>
-                        {" "}
-                        <p className={style.movieTitle}>
-                          {movie.title || movie.name || "（タイトルなし）"}
-                        </p>
+                        {movie.title || movie.name || "（タイトルなし）"}
                       </p>
                       {selectedMovies.find((m) => m.id === movie.id) && (
                         <p className={style.selectedText}>選択中</p>

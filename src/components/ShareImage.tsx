@@ -14,6 +14,7 @@ interface ImagePageProps {
 }
 
 const ShareImage = ({ movieImageUrls, movieTitles }: ImagePageProps) => {
+  const [loading, setLoading] = useState(true);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const backgroundUrl = "test/merge-images/best-movie-bg.png";
 
@@ -25,6 +26,9 @@ const ShareImage = ({ movieImageUrls, movieTitles }: ImagePageProps) => {
       if (!ctx) {
         return; // ctxがnullの場合は、処理を中止
       }
+
+      canvas.width = 1179;
+      canvas.height = 2229;
 
       // スケーリング係数の計算
       const scaleX = canvas.width / 1179;
@@ -44,6 +48,7 @@ const ShareImage = ({ movieImageUrls, movieTitles }: ImagePageProps) => {
       // 画像のロードと描画処理
       Promise.all(
         imagesToLoad.map((src) => {
+          setLoading(true);
           return new Promise<HTMLImageElement>((resolve) => {
             const img = new Image();
             img.crossOrigin = "anonymous"; //CORSエラー対策
@@ -109,86 +114,13 @@ const ShareImage = ({ movieImageUrls, movieTitles }: ImagePageProps) => {
           // 画像のロードエラーが発生した場合の処理
           console.error(error);
           alert("画像ロードエラー");
+          setLoading(false);
+        })
+        .finally(() => {
+          setLoading(false); // ローディング完了
         });
     }
   }, [movieImageUrls, movieTitles]);
-
-  // useEffect(() => {
-  //   if (canvasRef.current) {
-  //     const canvas = canvasRef.current;
-  //     const ctx = canvas.getContext("2d");
-  //     const topThreeMovieImageUrls = movieImageUrls.slice(0, 3);
-  //     const imagesToLoad = [backgroundUrl, ...topThreeMovieImageUrls];
-  //     const imagePositions = [
-  //       { x: 0, y: 0 }, // 背景画像
-  //       { x: 220, y: 380 },
-  //       { x: 220, y: 690 },
-  //       { x: 220, y: 1000 }
-  //     ];
-
-  //     if (ctx) {
-  //       Promise.all(
-  //         imagesToLoad.map((src) => {
-  //           return new Promise<HTMLImageElement>((resolve) => {
-  //             const img = new Image();
-  //             img.crossOrigin = "anonymous"; //CORSエラー対策
-  //             img.onload = () => resolve(img);
-  //             img.src = src;
-  //           });
-  //         })
-  //       ).then((images) => {
-  //         images.forEach((img, index) => {
-  //           // 3番目までの画像を描画
-  //           const position = imagePositions[index];
-  //           const ratio = img.naturalHeight / img.naturalWidth;
-  //           const height =
-  //             index === 0
-  //               ? (img.naturalHeight / img.naturalWidth) * canvas.width
-  //               : 170 * ratio;
-  //           ctx.drawImage(
-  //             img,
-  //             position.x,
-  //             position.y,
-  //             index === 0 ? canvas.width : 190,
-  //             height
-  //           );
-  //         });
-
-  //         // 3番目までのテキストを描画
-  //         movieTitles.slice(0, 3).forEach((title, index) => {
-  //           ctx.fillStyle = "white";
-  //           ctx.font = "bold 60px Arial";
-  //           const position = imagePositions[index + 1];
-  //           const textX = position.x + 190 + 30;
-  //           const imageHeight =
-  //             170 *
-  //             (images[index + 1].naturalHeight /
-  //               images[index + 1].naturalWidth);
-  //           const textY = position.y + imageHeight / 2 - 20;
-  //           wrapText(ctx, title || "（タイトルなし）", textX, textY, 640, 70);
-  //         });
-
-  //         // 4番目以降のテキストを描画
-  //         let startY = 840 + 170 * 3;
-  //         movieTitles.slice(3).forEach((title, index) => {
-  //           const dynamicTitle = `${index + 4}. ${title || "（タイトルなし）"}`;
-  //           ctx.font = "bold 46px Arial";
-  //           const textX = 120;
-  //           let textY = startY;
-  //           const textHeight = wrapText(
-  //             ctx,
-  //             dynamicTitle,
-  //             textX,
-  //             textY,
-  //             960,
-  //             64
-  //           );
-  //           startY += textHeight + 24;
-  //         });
-  //       });
-  //     }
-  //   }
-  // }, [backgroundUrl, movieImageUrls, movieTitles]);
 
   // シェア用のテキスト生成
   const createShareText = (titles: string[]) => {
@@ -274,6 +206,15 @@ const ShareImage = ({ movieImageUrls, movieTitles }: ImagePageProps) => {
       console.log("キャンバスがnullです。画像をダウンロードできません。");
     }
   };
+
+  if (loading) {
+    return (
+      <div>
+        <canvas ref={canvasRef} width="1179" height="2229" />
+        <p>ローディング中...</p>
+      </div>
+    );
+  }
 
   return (
     <div className={style.canvasContainer}>

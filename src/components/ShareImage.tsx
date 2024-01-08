@@ -27,8 +27,11 @@ const ShareImage = ({ movieImageUrls, movieTitles }: ImagePageProps) => {
         return; // ctxがnullの場合は、処理を中止
       }
 
-      canvas.width = 1179;
-      canvas.height = 2229;
+      // canvas.width = 1179;
+      // canvas.height = 2229;
+
+      canvas.width = 24;
+      canvas.height = 48;
 
       // スケーリング係数の計算
       const scaleX = canvas.width / 1179;
@@ -117,7 +120,10 @@ const ShareImage = ({ movieImageUrls, movieTitles }: ImagePageProps) => {
           setLoading(false);
         })
         .finally(() => {
-          setLoading(false); // ローディング完了
+          // setTimeout(() => {
+          //   setLoading(false); // ローディング完了
+          // }, 2000); // 2秒後にローディングを解除
+          setLoading(false);
         });
     }
   }, [movieImageUrls, movieTitles]);
@@ -209,7 +215,7 @@ const ShareImage = ({ movieImageUrls, movieTitles }: ImagePageProps) => {
 
   if (loading) {
     return (
-      <div>
+      <div className={style.canvasContainer}>
         <canvas ref={canvasRef} width="1179" height="2229" />
         <p>ローディング中...</p>
       </div>

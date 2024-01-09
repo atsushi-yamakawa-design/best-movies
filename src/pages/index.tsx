@@ -55,7 +55,7 @@ interface Movie {
 
 export default function MoviePage() {
   const [search, setSearch] = useState("");
-  const [movies, setMovies] = useState<Movie[]>([]);
+  const [movies, setMovies] = useState<MultiSearchResult[]>([]);
   const [selectedMovies, setSelectedMovies] = useState<Movie[]>([]);
   const [showSelectedList, setShowSelectedList] = useState(false);
   const [showShareImage, setShowShareImage] = useState(false);
@@ -84,13 +84,8 @@ export default function MoviePage() {
 
           const combinedResults = [...resultsHiragana, ...resultsKatakana];
 
-          // IDに基づいて重複を除去
-          const uniqueResults = [
-            ...new Map(combinedResults.map((item) => [item.id, item])).values()
-          ];
-
           // 映画やTVシリーズ、そして人物に関連する作品を抽出
-          const allRelatedItems = uniqueResults.flatMap((item) => {
+          const allRelatedItems = combinedResults.flatMap((item) => {
             if (item.media_type === "movie" || item.media_type === "tv") {
               return [item];
             } else if (item.media_type === "person" && item.known_for) {
@@ -107,11 +102,18 @@ export default function MoviePage() {
           });
 
           // 最終的なデータセット全体に対して重複除去
-          const finalUniqueResults = [
+          const UniqueResults = [
             ...new Map(allRelatedItems.map((item) => [item.id, item])).values()
           ];
 
-          setMovies(finalUniqueResults);
+          // リリース年で降順ソート（新しい日付が先）
+          const sortedResults = UniqueResults.sort((a, b) => {
+            const dateA = a.release_date || a.first_air_date || "";
+            const dateB = b.release_date || b.first_air_date || "";
+            return dateB.localeCompare(dateA); // 逆の順序で比較
+          });
+
+          setMovies(sortedResults);
         })
         .catch((error) => console.error(error));
     }
@@ -130,7 +132,7 @@ export default function MoviePage() {
     setSearch("");
   };
 
-  const handleMovieSelect = (movie: Movie) => {
+  const handleMovieSelect = (movie: MultiSearchResult) => {
     if (selectedMovies.find((m) => m.id === movie.id)) {
       setSelectedMovies(selectedMovies.filter((m) => m.id !== movie.id));
     } else {
@@ -278,6 +280,13 @@ export default function MoviePage() {
                     <div className={style.movieText}>
                       <p className={style.movieTitle}>
                         {movie.title || movie.name || "（タイトルなし）"}
+                      </p>
+                      <p className={style.releaseDate}>
+                        {movie.release_date
+                          ? movie.release_date.split("-")[0]
+                          : movie.first_air_date
+                          ? movie.first_air_date.split("-")[0]
+                          : "年不明"}
                       </p>
                       {selectedMovies.find((m) => m.id === movie.id) && (
                         <p className={style.selectedText}>選択中</p>

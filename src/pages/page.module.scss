@@ -283,17 +283,22 @@
       margin-top: 4em;
       display: flex;
       flex-direction: column;
-      gap: 0.2em;
+      gap: 0.4em;
       li {
         display: flex;
         justify-content: space-between;
         .movieText {
           width: 80%;
+          .releaseDate {
+            font-size: 0.8em;
+            color: $color-gray;
+          }
           .selectedText {
             font-size: 0.8em;
             color: $color-primary-deep;
           }
         }
+
         img {
           width: 18%;
         }

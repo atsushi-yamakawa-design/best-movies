@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import style from "./page.module.scss";
 import Image from "next/image";
 import ShareImage from "../components/ShareImage";
@@ -62,6 +62,7 @@ export default function MoviePage() {
   const [selectedMovieTitles, setSelectedMovieTitles] = useState<string[]>([]);
   const [showSearchModule, setShowSearchModule] = useState(true);
   const [movieImageUrls, setMovieImageUrls] = useState<string[]>([]); // 映画の画像URLの配列の状態
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // 検索ロジック
   useEffect(() => {
@@ -139,6 +140,7 @@ export default function MoviePage() {
   // 検索窓をクリアする
   const clearSearch = () => {
     setSearch("");
+    inputRef.current?.focus(); // inputにフォーカス
   };
 
   const handleMovieSelect = (movie: MultiSearchResult) => {
@@ -255,6 +257,7 @@ export default function MoviePage() {
                   type="text"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
+                  ref={inputRef}
                   placeholder="タイトルを入力"
                   className={style.textInput}
                   onFocus={handleFocus}

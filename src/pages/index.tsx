@@ -127,6 +127,15 @@ export default function MoviePage() {
     });
   }
 
+  // input要素にフォーカスがあたった時にページの一番上にスクロールする
+  const handleFocus = () => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
+  };
+
   // 検索窓をクリアする
   const clearSearch = () => {
     setSearch("");
@@ -248,6 +257,7 @@ export default function MoviePage() {
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="タイトルを入力"
                   className={style.textInput}
+                  onFocus={handleFocus}
                 />
                 {search && (
                   <button onClick={clearSearch}>

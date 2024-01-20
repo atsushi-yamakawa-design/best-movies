@@ -17,7 +17,7 @@ interface ImagePageProps {
 const ShareImage = ({ movieImageUrls, movieTitles }: ImagePageProps) => {
   const [loading, setLoading] = useState(true);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const backgroundUrl = "test/merge-images/best-movie-bg.png";
+  const backgroundUrl = "images/best-movie-bg.png";
 
   useEffect(() => {
     if (canvasRef.current) {

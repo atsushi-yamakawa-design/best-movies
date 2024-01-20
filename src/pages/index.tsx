@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import style from "./page.module.scss";
 import Image from "next/image";
 import ShareImage from "../components/ShareImage";
+import Link from "next/link";
 
 // アイコン素材
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -258,7 +259,7 @@ export default function MoviePage() {
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   ref={inputRef}
-                  placeholder="タイトルを入力"
+                  placeholder="映画タイトルで検索"
                   className={style.textInput}
                   onFocus={handleFocus}
                 />
@@ -390,7 +391,17 @@ export default function MoviePage() {
         )}
         <div className={style.credit}>
           movie database by
-          <Image src="/icon/tmdb_logo.svg" alt="TMDB" width={80} height={10} />
+          <Link
+            href={`https://www.themoviedb.org/`}
+            target="_blank"
+            rel="noopener noreferrer">
+            <Image
+              src="/icon/tmdb_logo.svg"
+              alt="TMDB"
+              width={80}
+              height={10}
+            />
+          </Link>
         </div>
       </main>
     </>

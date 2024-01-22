@@ -5,6 +5,9 @@ import Image from "next/image";
 import ShareImage from "../components/ShareImage";
 import Link from "next/link";
 
+axios.defaults.headers.post["Content-Type"] =
+  "application/x-www-form-urlencoded";
+
 // アイコン素材
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -249,7 +252,7 @@ export default function MoviePage() {
             </button>
           </div>
         )}
-        <h1>⭐️🎞️わたしの2023映画ベスト10🍿⭐️</h1>
+        <h1>⭐️🎞️わたしの映画ベスト10🍿⭐️</h1>
         {showSearchModule && ( // 検索モジュールの表示/非表示を制御
           <div className={style.searchModule}>
             <div className={style.textInputWrapper}>
@@ -323,6 +326,9 @@ export default function MoviePage() {
         )}
         {showSelectedList && (
           <div className={style.selectedListModalWrapper}>
+            <div
+              className={style.Modalscreen}
+              onClick={handleCloseSelectedList}></div>
             <div className={style.selectedListModal}>
               <button
                 className={style.modalCloseButton}

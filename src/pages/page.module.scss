@@ -359,7 +359,8 @@
       position: relative;
       @media (min-width: 700px) {
         max-width: 700px;
-        margin: 0 auto;
+        margin: 0 auto 2em;
+        border-radius: 1em;
       }
       .modalCloseButton {
         position: absolute;
@@ -388,7 +389,9 @@
         max-height: calc(100dvh - 19px - 6em - 60px);
         border-top: 1px solid $border-color;
         border-bottom: 1px solid $border-color;
-        // background-color: #eef2f2;
+        @media (min-width: 700px) {
+          max-height: calc(100dvh - 19px - 6em - 120px);
+        }
         li {
           padding: 0.6em 0.6em;
           display: flex;
